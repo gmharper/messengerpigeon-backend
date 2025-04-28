@@ -25,3 +25,21 @@ describe("GET /api", () => {
       });
   });
 });
+
+describe.only("GET /api/topics", () => {
+  test("200: Responds with an object containing the topics with the slug and description properties", () => {
+    return request(app)
+      .get("/api/topics")
+      .expect(200)
+      .then((response) => {
+        topics = response.body.topics;
+        expect(topics[0]).toEqual(
+          expect.objectContaining({
+            slug: expect.any(String),
+            description: expect.any(String),
+            img_url: expect.any(String),
+          })
+        );
+      });
+  });
+});
