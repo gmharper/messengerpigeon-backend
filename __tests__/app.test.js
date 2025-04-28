@@ -43,3 +43,22 @@ describe.only("GET /api/topics", () => {
       });
   });
 });
+
+describe.only("GET /api/<bad_address>", () => {
+  test("404: Not Found error if entered an address that does not exist", () => {
+    return request(app)
+      .get("/api/banana")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("404: Not Found");
+      });
+  });
+  test("404: Not Found error if entered an address that is the wrong type", () => {
+    return request(app)
+      .get("/api/3845723957")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("404: Not Found");
+      });
+  });
+});
