@@ -6,15 +6,15 @@ a file named .env.development
 a file named .env.test
 
 In the .env.development file create this line:
-PGDATABASE = nc_news
+PGDATABASE=nc_news
 
 In the .env.test file create this line:
-PGDATABASE = nc_news_test
+PGDATABASE=nc_news_test
 
 If you are on Ubuntu then you will also need to add these lines to BOTH .env files
 and replace with your psql username and password:
-PGUSER = 'your_psql_username'
-PGPASSWORD = 'your_psql_password'
+PGUSER=your_psql_username
+PGPASSWORD=your_psql_password
 
 to set your psql password type into the terminal:
 psql postgres
