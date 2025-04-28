@@ -4,6 +4,7 @@ const app = express();
 const getApi = require("./controllers/api.controller.js");
 const {
   getTopics,
+  getArticles,
   getArticleById,
 } = require("./controllers/nc_news.controller.js");
 
@@ -11,9 +12,9 @@ app.use(express.json());
 
 app.get("/api", getApi);
 
-app.get("/api/topics", (req, res, next) => {
-  getTopics(req, res, next);
-});
+app.get("/api/topics", getTopics);
+
+app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id", getArticleById);
 
