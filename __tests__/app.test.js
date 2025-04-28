@@ -2,6 +2,7 @@ const db = require("../db/connection.js");
 const request = require("supertest");
 const app = require("../app/api.js");
 const endpointsJson = require("../endpoints.json");
+require("jest-sorted");
 
 const data = require("../db/data/test-data");
 const seed = require("../db/seeds/seed.js");
@@ -104,19 +105,30 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then((response) => {
         const articles = response.body.articles;
-        console.log(articles[0]);
-        expect(articles[0]).toEqual(
-          expect.objectContaining({
-            article_id: expect.any(Number),
-            title: expect.any(String),
-            topic: expect.any(String),
-            author: expect.any(String),
-            body: expect.any(String),
-            created_at: expect.any(String),
-            votes: expect.any(Number),
-            article_img_url: expect.any(String),
-          })
-        );
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              comment_count: expect.any(Number),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+            })
+          ); // <--
+        }); // <-- this is why I love javascript ;-;
+      }); ///// <--
+  });
+  test("200: the articles are sorted by date in descending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
       });
   });
 });

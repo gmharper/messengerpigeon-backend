@@ -4,6 +4,7 @@ const {
   queryTopics,
   queryArticles,
   queryArticleById,
+  queryCommentCount,
 } = require("../models/nc_news.model");
 
 const getTopics = (req, res, next) => {
@@ -20,12 +21,22 @@ const getTopics = (req, res, next) => {
 };
 
 const getArticles = (req, res, next) => {
-  return queryArticles(req.body)
+  return queryArticles()
     .then((articles) => {
       if (!articles) {
         return res.status(404).send({ msg: "404: Not Found" });
       }
-      res.status(200).send({ articles: articles });
+      const promiseArray = [];
+      for (let i = 0; i < articles.length; i++) {
+        delete articles[i].body;
+        promiseArray.push(queryCommentCount(articles[i].article_id));
+      }
+      Promise.all(promiseArray).then((values) => {
+        for (let i = 0; i < values.length; i++) {
+          articles[i].comment_count = values[i];
+        }
+        res.status(200).send({ articles: articles });
+      });
     })
     .catch((err) => {
       next(err);
