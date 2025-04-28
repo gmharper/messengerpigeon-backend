@@ -26,7 +26,7 @@ describe("GET /api", () => {
   });
 });
 
-describe.only("GET /api/topics", () => {
+describe("GET /api/topics", () => {
   test("200: Responds with an object containing the topics with the slug and description properties", () => {
     return request(app)
       .get("/api/topics")
@@ -93,6 +93,30 @@ describe("GET /api/articles/:article_id", () => {
       .expect(404)
       .then((response) => {
         expect(response.body.msg).toBe("404: Not Found");
+      });
+  });
+});
+
+describe("GET /api/articles", () => {
+  test("200: Responds with an object containing all the articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        console.log(articles[0]);
+        expect(articles[0]).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+          })
+        );
       });
   });
 });

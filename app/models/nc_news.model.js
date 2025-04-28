@@ -6,6 +6,11 @@ const queryTopics = () => {
   });
 };
 
+const queryArticles = () => {
+  return db.query("SELECT * FROM articles").then((result) => {
+    return result.rows;
+  });
+};
 const queryArticleById = (id) => {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1", [id])
@@ -14,4 +19,4 @@ const queryArticleById = (id) => {
     });
 };
 
-module.exports = { queryTopics, queryArticleById };
+module.exports = { queryTopics, queryArticles, queryArticleById };

@@ -1,15 +1,31 @@
 const app = require("../api");
-const models = require("../models/nc_news.model");
 
-const { queryTopics, queryArticleById } = require("../models/nc_news.model");
+const {
+  queryTopics,
+  queryArticles,
+  queryArticleById,
+} = require("../models/nc_news.model");
 
 const getTopics = (req, res, next) => {
-  return queryTopics(req.body)
+  return queryTopics()
     .then((topics) => {
       if (!topics) {
         return res.status(404).send({ msg: "404: Not Found" });
       }
       res.status(200).send({ topics: topics });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+const getArticles = (req, res, next) => {
+  return queryArticles(req.body)
+    .then((articles) => {
+      if (!articles) {
+        return res.status(404).send({ msg: "404: Not Found" });
+      }
+      res.status(200).send({ articles: articles });
     })
     .catch((err) => {
       next(err);
@@ -30,4 +46,4 @@ const getArticleById = (req, res, next) => {
     });
 };
 
-module.exports = { getTopics, getArticleById };
+module.exports = { getTopics, getArticles, getArticleById };
