@@ -6,6 +6,7 @@ require("jest-sorted");
 
 const data = require("../db/data/test-data");
 const seed = require("../db/seeds/seed.js");
+const comments = require("../db/data/test-data/comments.js");
 
 beforeEach(() => {
   return seed(data);
@@ -132,3 +133,61 @@ describe("GET /api/articles", () => {
       });
   });
 });
+
+describe.only("GET /api/articles/:article_id/comments", () => {
+  test("200: returns an array with the comments objects", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then((response) => {
+        const comments = response.body.comments;
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              article_id: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+  test("400: Bad Request when passed an id that is not valid", () => {
+    return request(app)
+      .get("/api/articles/banana/comments")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("400: Bad Request");
+      });
+  });
+  test("404: Not Found when given a number that exceeds the number of articles", () => {
+    return request(app)
+      .get("/api/articles/4454634/comments")
+      .expect(404)
+      .then((response) => {
+        console.log(response.body.comments);
+        expect(response.body.msg).toBe("404: Not Found");
+      });
+  });
+  test("404: Not Found when passed something other than comments", () => {
+    return request(app)
+      .get("/api/articles/1/banana")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("404: Not Found");
+      });
+  });
+});
+
+// describe("POST a comment", () => {
+//   return request(app)
+//     .post("/api/articles/1/comments")
+//     .send()
+//     .expect(201)
+//     .then((response) => {
+//       expect(response.body.msg).toBe("");
+//     });
+// });

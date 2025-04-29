@@ -6,6 +6,8 @@ const {
   getTopics,
   getArticles,
   getArticleById,
+  getCommentsByArticle,
+  postCommentToArticle,
 } = require("./controllers/nc_news.controller.js");
 
 app.use(express.json());
@@ -16,7 +18,11 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles", getArticles);
 
+app.get("/api/articles/:article_id/comments", getCommentsByArticle);
+
 app.get("/api/articles/:article_id", getArticleById);
+
+app.post("api/articles/:article_id/comments", postCommentToArticle);
 
 app.all("*splat", (req, res) => {
   res.status(404).send({ msg: "404: Not Found" });

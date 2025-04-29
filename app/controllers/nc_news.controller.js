@@ -4,7 +4,9 @@ const {
   queryTopics,
   queryArticles,
   queryArticleById,
+  queryCommentsByArticle,
   queryCommentCount,
+  insertCommentIntoArticle,
 } = require("../models/nc_news.model");
 
 const getTopics = (req, res, next) => {
@@ -57,4 +59,33 @@ const getArticleById = (req, res, next) => {
     });
 };
 
-module.exports = { getTopics, getArticles, getArticleById };
+const getCommentsByArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  return queryCommentsByArticle(article_id)
+    .then((comments) => {
+      if (!comments || comments.length === 0) {
+        return res.status(404).send({ msg: "404: Not Found" });
+      }
+      res.status(200).send({ comments: comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+const postCommentToArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  return insertCommentIntoArticle(article_id).then((comment) => {
+    if (!comment) {
+      return res.status(404).send({ msg: "404: Not Found" });
+    }
+  });
+};
+
+module.exports = {
+  getTopics,
+  getArticles,
+  getArticleById,
+  getCommentsByArticle,
+  postCommentToArticle,
+};
