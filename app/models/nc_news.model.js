@@ -40,15 +40,24 @@ const queryCommentCount = (article_id) => {
     });
 };
 
-const insertCommentIntoArticle = (article_id) => {
+const insertCommentIntoArticle = (article_id, username, body) => {
   return db
-    .query("INSERT INTO comments WHERE article_id = $1 RETURNING *", [
-      article_id,
-    ])
+    .query(
+      "INSERT INTO comments (article_id, body, author) VALUES ($1, $2, $3)",
+      [article_id, body, username]
+    )
     .then((result) => {
       return result.rows[0];
     });
 };
+
+// comment_id SERIAL PRIMARY KEY,
+//         article_id INT REFERENCES articles(article_id),
+//         article_title VARCHAR,
+//         body TEXT,
+//         votes INT DEFAULT 0,
+//         author VARCHAR REFERENCES users(username),
+//         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 module.exports = {
   queryTopics,

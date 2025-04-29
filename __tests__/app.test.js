@@ -183,9 +183,10 @@ describe.only("GET /api/articles/:article_id/comments", () => {
 });
 
 // describe("POST a comment", () => {
+//   const comment = { username: "gmharper", body: "a student at northcoders" };
 //   return request(app)
 //     .post("/api/articles/1/comments")
-//     .send()
+//     .send(comment)
 //     .expect(201)
 //     .then((response) => {
 //       expect(response.body.msg).toBe("");

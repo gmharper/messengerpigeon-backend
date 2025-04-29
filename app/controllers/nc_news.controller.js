@@ -75,11 +75,15 @@ const getCommentsByArticle = (req, res, next) => {
 
 const postCommentToArticle = (req, res, next) => {
   const { article_id } = req.params;
-  return insertCommentIntoArticle(article_id).then((comment) => {
-    if (!comment) {
-      return res.status(404).send({ msg: "404: Not Found" });
+  const { username, body } = req.body;
+  return insertCommentIntoArticle(article_id, username, body).then(
+    (comment) => {
+      if (!comment) {
+        return res.status(404).send({ msg: "404: Not Found" });
+      }
+      res.status(201).send({ comment: comment });
     }
-  });
+  );
 };
 
 module.exports = {
