@@ -4,7 +4,7 @@
   },
   "GET /api/users": {
     "description": "serves an array of all users",
-    "exampleResponse":  {
+    "exampleResponse": {
       "username": "tickle122",
       "name": "Tom Tickle",
       "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
@@ -19,6 +19,8 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
+    "queries": ["sort_by", "order"],
+    "exampleRequest": "/api/articles?sort_by=author&order=ASC",
     "exampleResponse": {
       "articles": [
         {
@@ -34,6 +36,7 @@
   },
   "GET /api/articles/:article_id": {
     "description": "serves an article by its id",
+    "exampleRequest": "/api/articles/3",
     "exampleResponse": {
       "article": {
         "article_id": 1,
@@ -47,12 +50,22 @@
       }
     }
   },
+  "GET /api/articles/:article_id/comments": {
+    "description:": "",
+    "exampleRequest": "/api/articles/3/comments",
+    "exampleResponse": {}
+  },
   "POST /api/articles/:article_id/comment": {
     "description": "posts a new comment to the article",
     "exampleResponse": {}
   },
   "POST /api/articles": {
     "description": "patches an article by updating its vote count",
+    "exampleResponse": {}
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "",
+    "exampleRequest": "",
     "exampleResponse": {}
   },
   "DELETE /api/comments/:comment_id": {

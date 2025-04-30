@@ -13,11 +13,10 @@ const {
 } = require("../models/nc_news.model");
 
 const getUsers = (req, res, next) => {
-  return queryUsers()
-  .then((users) => {
-    return res.status(200).send({ users: users})
-  })
-}
+  return queryUsers().then((users) => {
+    return res.status(200).send({ users: users });
+  });
+};
 
 const getTopics = (req, res, next) => {
   return queryTopics()
@@ -33,7 +32,8 @@ const getTopics = (req, res, next) => {
 };
 
 const getArticles = (req, res, next) => {
-  return queryArticles()
+  const { sort_by, order } = req.query;
+  return queryArticles(sort_by, order)
     .then((articles) => {
       if (!articles) {
         return res.status(404).send({ msg: "404: Not Found" });
@@ -86,46 +86,52 @@ const getCommentsByArticle = (req, res, next) => {
 const postCommentToArticle = (req, res, next) => {
   const { article_id } = req.params;
   const { username, body } = req.body;
-  return insertCommentIntoArticle(article_id, username, body).then(
-    (comment) => {
+
+  return insertCommentIntoArticle(article_id, username, body)
+    .then((comment) => {
       if (!comment) {
         return res.status(404).send({ msg: "404: Not Found" });
       }
       res.status(201).send({ comment: comment });
-    }
-  )
-  .catch((err) => {
-    next(err)
-  })
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 const updateArticle = (req, res, next) => {
-  const { article_id } = req.params
-  if (!req.body.hasOwnProperty(inc_votes)) {
-    return res.status(400).send({ msg: "400: Bad Request"})
+  const { article_id } = req.params;
+
+  if (!req.body.hasOwnProperty("inc_votes")) {
+    return res.status(400).send({ msg: "400: Bad Request" });
   }
-  const votes = req.body.inc_votes
-  return updateArticleVotes(article_id, votes)
-  .then((article) => {
-    if (!article) {
-      return res.status(404).send({ msg: "404: Not Found" })
-    }
-    res.status(200).send({ article: article })
-  })
-  .catch((err) => {
-    next(err)
-  })
-}
+  if (!typeof req.body.inc_votes === "number") {
+    return res.status(400).send({ msg: "400: Bad Request" });
+  }
+
+  const { inc_votes } = req.body;
+  return updateArticleVotes(article_id, inc_votes)
+    .then((article) => {
+      if (!article) {
+        res.status(404).send({ msg: "404: Not Found" });
+      }
+      res.status(200).send({ article: article });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
 const deleteComment = (req, res, next) => {
-  const { comment_id } = req.params
+  const { comment_id } = req.params;
   return deleteFromComments(comment_id)
-  .then(() => {
-    return res.status(204).send({ msg: "204: No Content"})
-  })
-  }
-
-
+    .then(() => {
+      return res.status(204).send({ msg: "No Content" });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
 module.exports = {
   getUsers,
