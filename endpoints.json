@@ -2,6 +2,14 @@
   "GET /api": {
     "description": "serves up a json representation of all the available endpoints of the api"
   },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "exampleResponse":  {
+      "username": "tickle122",
+      "name": "Tom Tickle",
+      "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
+    }
+  },
   "GET /api/topics": {
     "description": "serves an array of all topics",
     "queries": [],
@@ -38,5 +46,17 @@
         "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       }
     }
+  },
+  "POST /api/articles/:article_id/comment": {
+    "description": "posts a new comment to the article",
+    "exampleResponse": {}
+  },
+  "POST /api/articles": {
+    "description": "patches an article by updating its vote count",
+    "exampleResponse": {}
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes the comment by its id",
+    "exampleResponse": "204: No Content"
   }
 }

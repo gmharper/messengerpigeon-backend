@@ -189,6 +189,79 @@ describe.only("GET /api/articles/:article_id/comments", () => {
 //     .send(comment)
 //     .expect(201)
 //     .then((response) => {
-//       expect(response.body.msg).toBe("");
+//       console.log(response.body)
+//       expect(response.body.comment).toEqual({ 
+//         username: "gmharper", body: "a student at northcoders" })
 //     });
 // });
+
+// describe("PATCH an article", () => {
+//   test("200: Successfully paches and returns the article", () => {
+//     const votes = { inv_votes: 100 }
+//     return request(app)
+//       .post("/api/articles/1")
+//       .send(votes)
+//       .expect(200)
+//       .then((response) => {
+//         expect(response.body).toEqual(
+//           expect.objectContaining({
+//             comment_id: expect.any(Number),
+//             votes: expect.any(Number),
+//             created_at: expect.any(String),
+//             author: expect.any(String),
+//             body: expect.any(String),
+//             article_id: expect.any(Number),
+//           })
+//         )
+//     })
+//   })
+//   test("400: Bad Request when passed an id that is not valid", () => {
+//     const votes = { inv_votes: 100 }
+//     return request(app)
+//     .post("/api/articles/banana")
+//     .send(votes)
+//     .expect(400)
+//   })
+//   test("404", () => {
+//     const votes = { inc_votes: 100 }
+//     return request(app)
+//     .post("/api/articles/4325345")
+//     .send(votes)
+//     .expect(404)
+//   })
+//   test("400", () => {
+//     const votes = { votes: 100 }
+//     return request(app)
+//     .post("/api/articles/1")
+//     .send(votes)
+//     .expect(400)
+//     .then((response) => {
+//       expect(response.body.msg).toBe("400: Bad Request")
+//     })
+//   })
+//   test("400", () => {
+//     const votes = { inc_votes: not_a_number }
+//     return request(app)
+//     .post("/api/articles/1")
+//     .send(votes)
+//     .expect(400)
+//     .then((response) => {
+//       expect(response.body.msg).toBe("400: Bad Request")
+//     })
+//   })
+// })
+
+// describe("200: get the users", () => {
+//   return request(app)
+//   .get("/api/users")
+//   .expect(200)
+//   .then((response) => {
+//     expect(response.body).toEqual(
+//       expect.objectContaining({
+//         username: expect.any(String),
+//         name: expect.any(String),
+//         avatar_url: expect.any(String),
+//       })
+//     )
+//   })
+// })

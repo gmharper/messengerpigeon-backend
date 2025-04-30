@@ -1,5 +1,13 @@
 const db = require("../../db/connection");
 
+const queryUsers = () => {
+  return db
+  .query("SELECT * FROM users")
+  .then((result) => {
+    return result.rows
+  })
+}
+
 const queryTopics = () => {
   return db.query("SELECT * FROM topics").then((result) => {
     return result.rows;
@@ -43,13 +51,26 @@ const queryCommentCount = (article_id) => {
 const insertCommentIntoArticle = (article_id, username, body) => {
   return db
     .query(
-      "INSERT INTO comments (article_id, body, author) VALUES ($1, $2, $3)",
+      "INSERT INTO comments (article_id, body, author) VALUES ($1, $2, $3) RETURNING *",
       [article_id, body, username]
     )
     .then((result) => {
       return result.rows[0];
     });
 };
+
+const updateArticleVotes = (article_id, votes) => {
+  return db
+  .query("UPDATE articles SET votes=votes+$2 WHERE article_id =$1 RETURNING *", [article_id, votes])
+  .then((result) => {
+    return result.rows[0]
+  })
+}
+
+const deleteFromComments = (comment_id) => {
+  return db
+  .query("DELETE FROM comments WHERE comment_id = $1", [comment_id])
+}
 
 // comment_id SERIAL PRIMARY KEY,
 //         article_id INT REFERENCES articles(article_id),
@@ -60,10 +81,13 @@ const insertCommentIntoArticle = (article_id, username, body) => {
 //         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 module.exports = {
+  queryUsers,
   queryTopics,
   queryArticles,
   queryArticleById,
   queryCommentsByArticle,
   queryCommentCount,
   insertCommentIntoArticle,
+  updateArticleVotes,
+  deleteFromComments,
 };

@@ -1,13 +1,23 @@
 const app = require("../api");
 
 const {
+  queryUsers,
   queryTopics,
   queryArticles,
   queryArticleById,
   queryCommentsByArticle,
   queryCommentCount,
   insertCommentIntoArticle,
+  updateArticleVotes,
+  deleteFromComments,
 } = require("../models/nc_news.model");
+
+const getUsers = (req, res, next) => {
+  return queryUsers()
+  .then((users) => {
+    return res.status(200).send({ users: users})
+  })
+}
 
 const getTopics = (req, res, next) => {
   return queryTopics()
@@ -83,13 +93,47 @@ const postCommentToArticle = (req, res, next) => {
       }
       res.status(201).send({ comment: comment });
     }
-  );
+  )
+  .catch((err) => {
+    next(err)
+  })
 };
 
+const updateArticle = (req, res, next) => {
+  const { article_id } = req.params
+  if (!req.body.hasOwnProperty(inc_votes)) {
+    return res.status(400).send({ msg: "400: Bad Request"})
+  }
+  const votes = req.body.inc_votes
+  return updateArticleVotes(article_id, votes)
+  .then((article) => {
+    if (!article) {
+      return res.status(404).send({ msg: "404: Not Found" })
+    }
+    res.status(200).send({ article: article })
+  })
+  .catch((err) => {
+    next(err)
+  })
+}
+
+const deleteComment = (req, res, next) => {
+  const { comment_id } = req.params
+  return deleteFromComments(comment_id)
+  .then(() => {
+    return res.status(204).send({ msg: "204: No Content"})
+  })
+  }
+
+
+
 module.exports = {
+  getUsers,
   getTopics,
   getArticles,
   getArticleById,
   getCommentsByArticle,
   postCommentToArticle,
+  updateArticle,
+  deleteComment,
 };

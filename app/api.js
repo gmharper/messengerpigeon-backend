@@ -3,16 +3,21 @@ const app = express();
 
 const getApi = require("./controllers/api.controller.js");
 const {
+  getUsers,
   getTopics,
   getArticles,
   getArticleById,
   getCommentsByArticle,
   postCommentToArticle,
+  updateArticle,
+  deleteComment,
 } = require("./controllers/nc_news.controller.js");
 
 app.use(express.json());
 
 app.get("/api", getApi);
+
+app.get("/api/users", getUsers)
 
 app.get("/api/topics", getTopics);
 
@@ -23,6 +28,12 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticle);
 app.get("/api/articles/:article_id", getArticleById);
 
 app.post("api/articles/:article_id/comments", postCommentToArticle);
+
+app.post("/api/articles/:article_id", updateArticle);
+
+app.delete("/api/comments/:comment_id", deleteComment);
+
+
 
 app.all("*splat", (req, res) => {
   res.status(404).send({ msg: "404: Not Found" });
