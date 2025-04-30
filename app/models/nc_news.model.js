@@ -1,12 +1,10 @@
 const db = require("../../db/connection");
 
 const queryUsers = () => {
-  return db
-  .query("SELECT * FROM users")
-  .then((result) => {
-    return result.rows
-  })
-}
+  return db.query("SELECT * FROM users").then((result) => {
+    return result.rows;
+  });
+};
 
 const queryTopics = () => {
   return db.query("SELECT * FROM topics").then((result) => {
@@ -14,13 +12,32 @@ const queryTopics = () => {
   });
 };
 
-const queryArticles = () => {
-  return db
-    .query("SELECT * FROM articles ORDER BY created_at DESC")
-    .then((result) => {
-      return result.rows;
-    });
+const queryArticles = (sort = "created_at", order = "DESC") => {
+  const Sorts = [
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "votes",
+    "comment_count",
+    "created_at",
+  ];
+  const Orders = ["ASC", "DESC"];
+
+  if (!Sorts.includes(sort)) {
+    return Promise.reject({ status: 400, msg: "Invalid Sort" });
+  }
+  if (!Orders.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Invalid Order" });
+  }
+  if (Sorts.includes(sort) && Orders.includes(order.toUpperCase()))
+    return db
+      .query(`SELECT * FROM articles ORDER BY ${sort} ${order}`)
+      .then((result) => {
+        return result.rows;
+      });
 };
+
 const queryArticleById = (article_id) => {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1", [article_id])
@@ -61,16 +78,20 @@ const insertCommentIntoArticle = (article_id, username, body) => {
 
 const updateArticleVotes = (article_id, votes) => {
   return db
-  .query("UPDATE articles SET votes=votes+$2 WHERE article_id =$1 RETURNING *", [article_id, votes])
-  .then((result) => {
-    return result.rows[0]
-  })
-}
+    .query(
+      "UPDATE articles SET votes=votes+$2 WHERE article_id = $1 RETURNING *",
+      [article_id, votes]
+    )
+    .then((result) => {
+      return result.rows[0];
+    });
+};
 
 const deleteFromComments = (comment_id) => {
-  return db
-  .query("DELETE FROM comments WHERE comment_id = $1", [comment_id])
-}
+  return db.query("DELETE FROM comments WHERE comment_id = $1 RETURNING *", [
+    comment_id,
+  ]);
+};
 
 // comment_id SERIAL PRIMARY KEY,
 //         article_id INT REFERENCES articles(article_id),

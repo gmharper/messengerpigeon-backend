@@ -6,7 +6,6 @@ require("jest-sorted");
 
 const data = require("../db/data/test-data");
 const seed = require("../db/seeds/seed.js");
-const comments = require("../db/data/test-data/comments.js");
 
 beforeEach(() => {
   return seed(data);
@@ -134,7 +133,7 @@ describe("GET /api/articles", () => {
   });
 });
 
-describe.only("GET /api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   test("200: returns an array with the comments objects", () => {
     return request(app)
       .get("/api/articles/3/comments")
@@ -168,7 +167,6 @@ describe.only("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/4454634/comments")
       .expect(404)
       .then((response) => {
-        console.log(response.body.comments);
         expect(response.body.msg).toBe("404: Not Found");
       });
   });
@@ -182,86 +180,191 @@ describe.only("GET /api/articles/:article_id/comments", () => {
   });
 });
 
-// describe("POST a comment", () => {
-//   const comment = { username: "gmharper", body: "a student at northcoders" };
-//   return request(app)
-//     .post("/api/articles/1/comments")
-//     .send(comment)
-//     .expect(201)
-//     .then((response) => {
-//       console.log(response.body)
-//       expect(response.body.comment).toEqual({ 
-//         username: "gmharper", body: "a student at northcoders" })
-//     });
-// });
+describe("/api/articles/article_id/comments", () => {
+  test("POST a comment", () => {
+    const comment = {
+      username: "icellusedkars",
+      body: "student at northcoders",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(comment)
+      .expect(201)
+      .then((response) => {
+        const comment = response.body.comment;
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: "icellusedkars",
+            body: "student at northcoders",
+            article_id: expect.any(Number),
+          })
+        );
+      });
+  });
+});
 
-// describe("PATCH an article", () => {
-//   test("200: Successfully paches and returns the article", () => {
-//     const votes = { inv_votes: 100 }
-//     return request(app)
-//       .post("/api/articles/1")
-//       .send(votes)
-//       .expect(200)
-//       .then((response) => {
-//         expect(response.body).toEqual(
-//           expect.objectContaining({
-//             comment_id: expect.any(Number),
-//             votes: expect.any(Number),
-//             created_at: expect.any(String),
-//             author: expect.any(String),
-//             body: expect.any(String),
-//             article_id: expect.any(Number),
-//           })
-//         )
-//     })
-//   })
-//   test("400: Bad Request when passed an id that is not valid", () => {
-//     const votes = { inv_votes: 100 }
-//     return request(app)
-//     .post("/api/articles/banana")
-//     .send(votes)
-//     .expect(400)
-//   })
-//   test("404", () => {
-//     const votes = { inc_votes: 100 }
-//     return request(app)
-//     .post("/api/articles/4325345")
-//     .send(votes)
-//     .expect(404)
-//   })
-//   test("400", () => {
-//     const votes = { votes: 100 }
-//     return request(app)
-//     .post("/api/articles/1")
-//     .send(votes)
-//     .expect(400)
-//     .then((response) => {
-//       expect(response.body.msg).toBe("400: Bad Request")
-//     })
-//   })
-//   test("400", () => {
-//     const votes = { inc_votes: not_a_number }
-//     return request(app)
-//     .post("/api/articles/1")
-//     .send(votes)
-//     .expect(400)
-//     .then((response) => {
-//       expect(response.body.msg).toBe("400: Bad Request")
-//     })
-//   })
-// })
+describe("PATCH an article", () => {
+  test("200: Successfully patches and returns the article", () => {
+    const votes = { inc_votes: 100 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(votes)
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            article_img_url: expect.any(String),
+            title: expect.any(String),
+            topic: expect.any(String),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+          })
+        );
+        expect(article.votes).toEqual(200);
+      });
+  });
+  test("400: Bad Request when passed an id that is not valid", () => {
+    const votes = { inc_votes: 100 };
+    return request(app).patch("/api/articles/banana").send(votes).expect(400);
+  });
+  test("404", () => {
+    const votes = { inc_votes: 100 };
+    return request(app).patch("/api/articles/4325345").send(votes).expect(404);
+  });
+  test("400", () => {
+    const votes = { votes: 100 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(votes)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("400: Bad Request");
+      });
+  });
+  test("400", () => {
+    const votes = { inc_votes: "not_a_number" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(votes)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("400: Bad Request");
+      });
+  });
+  test("400", () => {
+    const votes = {};
+    return request(app)
+      .patch("/api/articles/1")
+      .send(votes)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("400: Bad Request");
+      });
+  });
+});
 
-// describe("200: get the users", () => {
-//   return request(app)
-//   .get("/api/users")
-//   .expect(200)
-//   .then((response) => {
-//     expect(response.body).toEqual(
-//       expect.objectContaining({
-//         username: expect.any(String),
-//         name: expect.any(String),
-//         avatar_url: expect.any(String),
-//       })
-//     )
-//   })
-// })
+describe("/api/comments/comment_id", () => {
+  test("DELETE from comments", () => {
+    return request(app)
+      .delete("/api/comments/5")
+      .expect(204)
+      .then((response) => {
+        expect(response.res.statusMessage).toBe("No Content");
+        expect(response.noContent).toBe(true);
+      });
+  });
+});
+
+describe("Get the users", () => {
+  test("200", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        const users = response.body.users;
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+  test("404", () => {
+    return request(app)
+      .get("/api/notusers")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("404: Not Found");
+      });
+  });
+  test("404", () => {
+    return request(app)
+      .get("/api/45564353")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("404: Not Found");
+      });
+  });
+});
+
+describe("/api/articles with custom queries", () => {
+  const validSorts = [
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "votes",
+    "comment_count",
+    "created_at",
+  ];
+  const validOrders = ["ASC", "DESC"];
+
+  test("200: returns the articles sorted by the custom query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author&order=ASC")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy("author", { ascending: true });
+      });
+  });
+  // test("200: test for all sorts & orders", () => {
+  //   validSorts.forEach((sort) => {
+  //     validOrders.forEach((order) => {
+  //       return request(app)
+  //         .get(`/api/articles?sort_by=${sort}&order=${order}`)
+  //         .expect(200)
+  //         .then((response) => {
+  //           console.log(sort, order);
+  //         });
+  //     });
+  //   });
+  // });
+  test("400: returns an error if given an invalid sort_by query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=bananas&order=ASC")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Sort");
+      });
+  });
+  test("400: returns an error if given an invalid order query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author&order=ascending")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Order");
+      });
+  });
+});
