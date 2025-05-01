@@ -71,7 +71,10 @@ const getArticleById = (req, res, next) => {
       if (!article) {
         return res.status(404).send({ msg: "404: Not Found" });
       }
-      res.status(200).send({ article: article });
+      return queryCommentCount(article_id).then((commentCount) => {
+        article.comment_count = commentCount;
+        res.status(200).send({ article: article });
+      });
     })
     .catch((err) => {
       next(err);
