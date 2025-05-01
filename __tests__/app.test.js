@@ -213,7 +213,7 @@ describe("/api/articles/article_id/comments", () => {
 });
 
 /////////////////////////////////////////
-describe("PATCH an article", () => {
+describe("PATCH /api/articles/:article_id", () => {
   test("200: Successfully patches and returns the article", () => {
     const votes = { inc_votes: 100 };
     return request(app)
@@ -278,7 +278,7 @@ describe("PATCH an article", () => {
 });
 
 ///////////////////////////////////////////
-describe("/api/comments/comment_id", () => {
+describe("DELETE /api/comments/:comment_id", () => {
   test("DELETE from comments", () => {
     return request(app)
       .delete("/api/comments/5")
@@ -291,7 +291,7 @@ describe("/api/comments/comment_id", () => {
 });
 
 //////////////////////////////////////////
-describe("Get the users", () => {
+describe("GET /api/users", () => {
   test("200", () => {
     return request(app)
       .get("/api/users")
@@ -328,7 +328,7 @@ describe("Get the users", () => {
 });
 
 ////////////////////////////////////////////////
-describe("/api/articles with custom queries", () => {
+describe("GET /api/articles?sort_by&order", () => {
   const validSorts = [
     "article_id",
     "title",
@@ -380,7 +380,7 @@ describe("/api/articles with custom queries", () => {
 });
 
 ///////////////////////////////////////////
-describe.only("/api/articles?topic", () => {
+describe("GET /api/articles?topic", () => {
   test("200", () => {
     return request(app)
       .get("/api/articles?topic=mitch")
@@ -405,4 +405,20 @@ describe.only("/api/articles?topic", () => {
         expect(response.body.msg).toBe("Invalid Query");
       });
   });
+});
+
+////////////////////////////////////////
+describe.only("GET api/articles/:article_id (with comment_count)", () => {
+  test("200: returns the correct comment_count", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article).toHaveProperty("comment_count");
+        expect(article.comment_count).toBe(11);
+      });
+  });
+  test("400", () => {});
+  test("404", () => {});
 });
