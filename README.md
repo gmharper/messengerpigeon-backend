@@ -43,4 +43,17 @@ Enter your new password into the terminal prompt
 
 ## Seeding
 
+`npm setup-dbs`
+`npm seed-dev`
+
 ## Testing
+
+to run all tests at once  
+`npm t`
+
+OR
+
+navigate into your tests folder
+`cd __tests__`
+run an individual test
+`npm test <test_to_run`
