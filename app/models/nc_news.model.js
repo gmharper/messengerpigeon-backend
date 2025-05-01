@@ -12,7 +12,7 @@ const queryTopics = () => {
   });
 };
 
-const queryArticles = (sort = "created_at", order = "DESC") => {
+const queryArticles = (sort = "created_at", order = "DESC", topic) => {
   const Sorts = [
     "article_id",
     "title",
@@ -23,19 +23,29 @@ const queryArticles = (sort = "created_at", order = "DESC") => {
     "created_at",
   ];
   const Orders = ["ASC", "DESC"];
+  const Topics = ["mitch", "coding", "football", "cooking"];
 
-  if (!Sorts.includes(sort)) {
+  if (sort && !Sorts.includes(sort)) {
     return Promise.reject({ status: 400, msg: "Invalid Sort" });
   }
-  if (!Orders.includes(order)) {
+  if (order && !Orders.includes(order)) {
     return Promise.reject({ status: 400, msg: "Invalid Order" });
   }
-  if (Sorts.includes(sort) && Orders.includes(order.toUpperCase()))
-    return db
-      .query(`SELECT * FROM articles ORDER BY ${sort} ${order}`)
-      .then((result) => {
-        return result.rows;
-      });
+  if (topic && !Topics.includes(topic)) {
+    return Promise.reject({ status: 400, msg: "Invalid Topic" });
+  }
+
+  let queryStr = `SELECT * FROM articles`;
+
+  if (topic && Topics.includes(topic)) {
+    queryStr += ` WHERE topic='${topic}'`;
+  }
+  if (Sorts.includes(sort) && Orders.includes(order.toUpperCase())) {
+    queryStr += ` ORDER BY ${sort} ${order}`;
+  }
+  return db.query(queryStr).then((result) => {
+    return result.rows;
+  });
 };
 
 const queryArticleById = (article_id) => {

@@ -19,8 +19,8 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
-    "queries": ["sort_by", "order"],
-    "exampleRequest": "/api/articles?sort_by=author&order=ASC",
+    "queries": ["sort_by", "order", "topic"],
+    "exampleRequest": "/api/articles?sort_by=author&order=ASC&topic=cooking",
     "exampleResponse": {
       "articles": [
         {
