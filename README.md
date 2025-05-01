@@ -1,23 +1,33 @@
 # NC News Seeding
 
-In order to use this repo you will need to create 2 .env files:
-in the root directory of the repository create:
-a file named .env.development
-a file named .env.test
+In order to use this repo you will need to create 3 .env files in the root directory of the repository with the following names:
+.env.development
+.env.test
+.env.production
 
-In the .env.development file create this line:
+In the .env.development file add the following line with NO spaces or quotation marks:
 PGDATABASE=nc_news
 
-In the .env.test file create this line:
+In the .env.test file add the following line with NO spaces or quotation marks:
 PGDATABASE=nc_news_test
 
-If you are on Ubuntu then you will also need to add these lines to BOTH .env files
-and replace with your psql username and password:
+In the .env.production file add the following line:
+DATABASE_URL=
+
+For Ubuntu users or Ubuntu running on WSL:
+If you are using Ubuntu then you will also need to add the following two lines to BOTH .env files. Replace with your psql username and password.
+Make sure there are NO spaces or quotation marks.
+
 PGUSER=your_psql_username
 PGPASSWORD=your_psql_password
 
-to set your psql password type into the terminal:
+To set your psql password type into the terminal:
 psql postgres
-\password 'your_username'
 
-a prompt should appear to enter your new password
+followed by:
+\password your_username
+
+A prompt should appear to enter your new password
+
+db password:
+Tcy4PDQhnajic16o
