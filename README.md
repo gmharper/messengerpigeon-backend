@@ -1,4 +1,10 @@
-# NC News Seeding
+## NC News Seeding
+
+Link to the hosted project: https://nc-news-seedingproject.onrender.com
+
+# **Installation**
+
+# **Setup**
 
 In order to use this repo you will need to create 3 .env files in the root directory of the repository with the following names:
 .env.development
@@ -28,6 +34,3 @@ followed by:
 \password your_username
 
 A prompt should appear to enter your new password
-
-db password:
-Tcy4PDQhnajic16o
