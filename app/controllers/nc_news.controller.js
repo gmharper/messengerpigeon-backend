@@ -32,8 +32,17 @@ const getTopics = (req, res, next) => {
 };
 
 const getArticles = (req, res, next) => {
-  const { sort_by, order } = req.query;
-  return queryArticles(sort_by, order)
+  const Queries = ["sort_by", "order", "topic"]; // valid queries
+
+  for (const key in req.query) {
+    if (!Queries.includes(key)) {
+      // if not a valid query paramater
+      return Promise.reject({ status: 400, msg: "Invalid Query" });
+    }
+  }
+  const { sort_by, order, topic } = req.query;
+
+  return queryArticles(sort_by, order, topic)
     .then((articles) => {
       if (!articles) {
         return res.status(404).send({ msg: "404: Not Found" });

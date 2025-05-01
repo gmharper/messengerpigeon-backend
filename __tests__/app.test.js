@@ -15,6 +15,7 @@ afterAll(() => {
   return db.end();
 });
 
+//////////////////////////////////////
 describe("GET /api", () => {
   test("200: Responds with an object detailing the documentation for each endpoint", () => {
     return request(app)
@@ -27,6 +28,7 @@ describe("GET /api", () => {
   });
 });
 
+//////////////////////////////////////
 describe("GET /api/topics", () => {
   test("200: Responds with an object containing the topics with the slug and description properties", () => {
     return request(app)
@@ -61,6 +63,7 @@ describe("GET /api/topics", () => {
   });
 });
 
+//////////////////////////////////////
 describe("GET /api/articles/:article_id", () => {
   test("200: Responds with an object containing the article corresponding to the article_id", () => {
     return request(app)
@@ -98,6 +101,7 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
+//////////////////////////////////////
 describe("GET /api/articles", () => {
   test("200: Responds with an object containing all the articles", () => {
     return request(app)
@@ -133,6 +137,7 @@ describe("GET /api/articles", () => {
   });
 });
 
+/////////////////////////////////////////
 describe("GET /api/articles/:article_id/comments", () => {
   test("200: returns an array with the comments objects", () => {
     return request(app)
@@ -180,6 +185,7 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
+//////////////////////////////////////////
 describe("/api/articles/article_id/comments", () => {
   test("POST a comment", () => {
     const comment = {
@@ -206,6 +212,7 @@ describe("/api/articles/article_id/comments", () => {
   });
 });
 
+/////////////////////////////////////////
 describe("PATCH an article", () => {
   test("200: Successfully patches and returns the article", () => {
     const votes = { inc_votes: 100 };
@@ -270,6 +277,7 @@ describe("PATCH an article", () => {
   });
 });
 
+///////////////////////////////////////////
 describe("/api/comments/comment_id", () => {
   test("DELETE from comments", () => {
     return request(app)
@@ -282,6 +290,7 @@ describe("/api/comments/comment_id", () => {
   });
 });
 
+//////////////////////////////////////////
 describe("Get the users", () => {
   test("200", () => {
     return request(app)
@@ -318,6 +327,7 @@ describe("Get the users", () => {
   });
 });
 
+////////////////////////////////////////////////
 describe("/api/articles with custom queries", () => {
   const validSorts = [
     "article_id",
@@ -365,6 +375,34 @@ describe("/api/articles with custom queries", () => {
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Invalid Order");
+      });
+  });
+});
+
+///////////////////////////////////////////
+describe.only("/api/articles?topic", () => {
+  test("200", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then((response) => {
+        return;
+      });
+  });
+  test("400: When passed an invalid topic", () => {
+    return request(app)
+      .get("/api/articles?topic=not_a_topic")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Topic");
+      });
+  });
+  test("400: When passed an invalid query parameter", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author&order=ASC&wrongquery=mitch")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Query");
       });
   });
 });
