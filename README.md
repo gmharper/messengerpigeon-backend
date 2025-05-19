@@ -56,5 +56,5 @@ OR
 navigate into your tests folder  
 `cd __tests__`
 
-run an individual test  
-`npm test <test_to_run`
+to run an individual test  
+`npm test <test_to_run>`

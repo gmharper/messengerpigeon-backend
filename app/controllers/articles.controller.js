@@ -1,35 +1,13 @@
-const app = require("../api");
+const {
+  queryAllArticles,
+  queryArticleById,
+  deleteFromArticles,
+} = require("../models/articles.model");
 
 const {
-  queryUsers,
-  queryTopics,
-  queryArticles,
-  queryArticleById,
-  queryCommentsByArticle,
   queryCommentCount,
-  insertCommentIntoArticle,
-  updateArticleVotes,
-  deleteFromComments,
-} = require("../models/nc_news.model");
-
-const getUsers = (req, res, next) => {
-  return queryUsers().then((users) => {
-    return res.status(200).send({ users: users });
-  });
-};
-
-const getTopics = (req, res, next) => {
-  return queryTopics()
-    .then((topics) => {
-      if (!topics) {
-        return res.status(404).send({ msg: "404: Not Found" });
-      }
-      res.status(200).send({ topics: topics });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
+  queryCommentsByArticle,
+} = require("../models/comments.model");
 
 const getArticles = (req, res, next) => {
   const Queries = ["sort_by", "order", "topic"]; // valid queries
@@ -42,7 +20,7 @@ const getArticles = (req, res, next) => {
   }
   const { sort_by, order, topic } = req.query;
 
-  return queryArticles(sort_by, order, topic)
+  return queryAllArticles(sort_by, order, topic)
     .then((articles) => {
       if (!articles) {
         return res.status(404).send({ msg: "404: Not Found" });
@@ -95,23 +73,7 @@ const getCommentsByArticle = (req, res, next) => {
     });
 };
 
-const postCommentToArticle = (req, res, next) => {
-  const { article_id } = req.params;
-  const { username, body } = req.body;
-
-  return insertCommentIntoArticle(article_id, username, body)
-    .then((comment) => {
-      if (!comment) {
-        return res.status(404).send({ msg: "404: Not Found" });
-      }
-      res.status(201).send({ comment: comment });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
-
-const updateArticle = (req, res, next) => {
+const patchArticle = (req, res, next) => {
   const { article_id } = req.params;
 
   if (!req.body.hasOwnProperty("inc_votes")) {
@@ -134,11 +96,11 @@ const updateArticle = (req, res, next) => {
     });
 };
 
-const deleteComment = (req, res, next) => {
-  const { comment_id } = req.params;
-  return deleteFromComments(comment_id)
+const deleteArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  return deleteFromArticles(article_id)
     .then(() => {
-      return res.status(204).send({ msg: "No Content" });
+      return res.status(204).send({ msg: "204: No Content" });
     })
     .catch((err) => {
       next(err);
@@ -146,12 +108,9 @@ const deleteComment = (req, res, next) => {
 };
 
 module.exports = {
-  getUsers,
-  getTopics,
   getArticles,
   getArticleById,
   getCommentsByArticle,
-  postCommentToArticle,
-  updateArticle,
-  deleteComment,
+  patchArticle,
+  deleteArticle,
 };
