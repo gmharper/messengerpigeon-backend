@@ -1,0 +1,24 @@
+const { getUsers } = require("../controllers/users.controller");
+
+const usersRouter = require("express").Router();
+
+usersRouter
+  .route("/")
+  .get(getUsers)
+  .post((req, res) => {
+    res.status(201).send("All OK from POST /api/users");
+  })
+  .patch((req, res) => {
+    res.status(200).send("All OK from PATCH /api/users");
+  });
+
+usersRouter
+  .route("/:id")
+  .get((req, res) => {
+    res.status(201).send("All OK from GET /api/users/:id");
+  })
+  .patch((req, res) => {
+    res.status(200).send("All OK from PATCH /api/users/:id");
+  });
+
+module.exports = usersRouter;
