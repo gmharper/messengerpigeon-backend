@@ -13,7 +13,7 @@ usersRouter
   });
 
 usersRouter
-  .route("/:id")
+  .route("/:username")
   .get(getUser)
   .patch((req, res) => {
     res.status(200).send("All OK from PATCH /api/users/:id");

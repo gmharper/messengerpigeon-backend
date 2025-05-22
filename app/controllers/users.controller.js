@@ -7,7 +7,8 @@ const getUsers = (req, res, next) => {
 };
 
 const getUser = (req, res, next) => {
-  return queryUserByName().then((user) => {
+  const { username } = req.params
+  return queryUserByName(username).then((user) => {
     return res.status(200).send( { user: user })
   })
 }
