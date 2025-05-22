@@ -1,4 +1,4 @@
-const { queryAllUsers } = require("../models/users.model");
+const { queryAllUsers, queryUserByName } = require("../models/users.model");
 
 const getUsers = (req, res, next) => {
   return queryAllUsers().then((users) => {
@@ -6,6 +6,13 @@ const getUsers = (req, res, next) => {
   });
 };
 
+const getUser = (req, res, next) => {
+  return queryUserByName().then((user) => {
+    return res.status(200).send( { user: user })
+  })
+}
+
 module.exports = {
   getUsers,
+  getUser
 };

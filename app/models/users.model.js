@@ -6,6 +6,14 @@ const queryAllUsers = () => {
   });
 };
 
+const queryUserByName = (username) => {
+  return db.query("SELECT * FROM users WHERE username = $1", [username])
+  .then((result) => {
+    return result.rows[0]
+  })
+}
+
 module.exports = {
   queryAllUsers,
+  queryUserByName,
 };

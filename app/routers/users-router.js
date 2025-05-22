@@ -1,4 +1,4 @@
-const { getUsers } = require("../controllers/users.controller");
+const { getUsers, getUser } = require("../controllers/users.controller");
 
 const usersRouter = require("express").Router();
 
@@ -14,9 +14,7 @@ usersRouter
 
 usersRouter
   .route("/:id")
-  .get((req, res) => {
-    res.status(201).send("All OK from GET /api/users/:id");
-  })
+  .get(getUser)
   .patch((req, res) => {
     res.status(200).send("All OK from PATCH /api/users/:id");
   });
