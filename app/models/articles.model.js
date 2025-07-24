@@ -11,30 +11,42 @@ const queryAllArticles = (sort = "created_at", order = "DESC", topic) => {
     "created_at",
   ];
   const Orders = ["ASC", "DESC"];
-  const Topics = ["mitch", "coding", "football", "cooking"];
+  const Topics = []
 
-  if (sort && !Sorts.includes(sort)) {
-    return Promise.reject({ status: 400, msg: "Invalid Sort" });
-  }
-  if (order && !Orders.includes(order)) {
-    return Promise.reject({ status: 400, msg: "Invalid Order" });
-  }
-  if (topic && !Topics.includes(topic)) {
-    return Promise.reject({ status: 400, msg: "Invalid Topic" });
-  }
+  return db.query("SELECT * FROM topics")
+    .then((result) => {
+      return result.rows
+    })
+    .then((result) => {
+      result.forEach((topic) => {
+        Topics.push(topic.slug)
+      })
+    })
+    .then(() => {
+      if (sort && !Sorts.includes(sort)) {
+        return Promise.reject({ status: 400, msg: "Invalid Sort" });
+      }
+      if (order && !Orders.includes(order)) {
+        return Promise.reject({ status: 400, msg: "Invalid Order" });
+      }
+      if (topic && !Topics.includes(topic)) {
+        return Promise.reject({ status: 400, msg: "Invalid Topic" });
+      }
+    
+      let queryStr = `SELECT * FROM articles`;
+    
+      if (topic && Topics.includes(topic)) {
+        queryStr += ` WHERE topic='${topic}'`;
+      }
+      if (Sorts.includes(sort) && Orders.includes(order.toUpperCase())) {
+        queryStr += ` ORDER BY ${sort} ${order}`;
+      }
+      return db.query(queryStr).then((result) => {
+        return result.rows;
+      });
+    })
+}
 
-  let queryStr = `SELECT * FROM articles`;
-
-  if (topic && Topics.includes(topic)) {
-    queryStr += ` WHERE topic='${topic}'`;
-  }
-  if (Sorts.includes(sort) && Orders.includes(order.toUpperCase())) {
-    queryStr += ` ORDER BY ${sort} ${order}`;
-  }
-  return db.query(queryStr).then((result) => {
-    return result.rows;
-  });
-};
 
 const queryArticleById = (article_id) => {
   return db

@@ -10,7 +10,7 @@ const {
 } = require("../models/comments.model");
 
 const getArticles = (req, res, next) => {
-  const Queries = ["sort_by", "order", "topic"]; // valid queries
+  const Queries = ["page", "topic", "sort_by", "order"]; // valid queries
 
   for (const key in req.query) {
     if (!Queries.includes(key)) {
@@ -18,7 +18,7 @@ const getArticles = (req, res, next) => {
       return Promise.reject({ status: 400, msg: "Invalid Query" });
     }
   }
-  const { sort_by, order, topic } = req.query;
+  const { page, topic, sort_by, order } = req.query;
 
   return queryAllArticles(sort_by, order, topic)
     .then((articles) => {

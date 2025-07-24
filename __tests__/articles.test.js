@@ -242,6 +242,7 @@ describe("GET /api/articles?topic", () => {
       .get("/api/articles?topic=mitch")
       .expect(200)
       .then((response) => {
+        console.log(response)
         return;
       });
   });
