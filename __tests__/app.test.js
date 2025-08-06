@@ -6,7 +6,6 @@ require("jest-sorted");
 
 const data = require("../db/data/test-data");
 const seed = require("../db/seeds/seed.js");
-const Test = require("supertest/lib/test.js");
 
 beforeEach(() => {
   return seed(data);
@@ -16,19 +15,16 @@ afterAll(() => {
   return db.end();
 });
 
-describe("", () => {
-  test("", () => {});
-});
 
-// //////////////////////////////////////
-// describe("GET /api", () => {
-//   test("200: Responds with an object detailing the documentation for each endpoint", () => {
-//     return request(app)
-//       .get("/api")
-//       .expect(200)
-//       .then((response) => {
-//         const endpoints = response.body;
-//         expect(endpoints).toEqual(endpointsJson);
-//       });
-//   });
-// });
+//////////////////////////////////////
+describe("GET /api", () => {
+  test("200: Responds with an object detailing the documentation for each endpoint", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((response) => {
+        const endpoints = response.body;
+        expect(endpoints).toEqual(endpointsJson);
+      });
+  });
+});

@@ -18,6 +18,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title: "22 Amazing open source React projects",
@@ -28,6 +29,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title: "Making sense of Redux",
@@ -38,6 +40,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/4974912/pexels-photo-4974912.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title: "Please stop worrying about Angular 3",
@@ -48,6 +51,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/14011035/pexels-photo-14011035.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title:
@@ -59,6 +63,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/4383298/pexels-photo-4383298.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title: "Using React Native: One Year Later",
@@ -69,6 +74,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/6424586/pexels-photo-6424586.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title: "Express.js: A Server-Side JavaScript Framework",
@@ -79,6 +85,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/11035482/pexels-photo-11035482.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title: "Learn HTML5, CSS3, and Responsive WebSite Design in One Go",
@@ -89,6 +96,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/1591061/pexels-photo-1591061.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title:
@@ -100,6 +108,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/11035481/pexels-photo-11035481.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title: "Designing Better JavaScript APIs",
@@ -110,6 +119,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/5483071/pexels-photo-5483071.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title: "The battle for Node.js security has only begun",
@@ -120,6 +130,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/10845119/pexels-photo-10845119.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title: "What does Jose Mourinho's handwriting say about his personality?",
@@ -130,6 +141,7 @@ module.exports = [
     votes: 0,
     article_img_url:
       "https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg?w=700&h=700",
+    comments: []
   },
   {
     title: "Who Will Manage Your Club in 2021?",

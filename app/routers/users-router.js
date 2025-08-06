@@ -1,22 +1,30 @@
-const { getUsers, getUser } = require("../controllers/users.controller");
+const { 
+  getUsers, getUser, getUserInfo,
+  postUser,
+  patchUser, patchUserInfo,
+  deleteUser 
+} = require("../controllers/users.controller");
 
 const usersRouter = require("express").Router();
 
-usersRouter
-  .route("/")
-  .get(getUsers)
-  .post((req, res) => {
-    res.status(201).send("All OK from POST /api/users");
-  })
-  .patch((req, res) => {
-    res.status(200).send("All OK from PATCH /api/users");
-  });
+const patch_msg = "This endpoint does nothing! Use PATCH instead"
 
-usersRouter
-  .route("/:username")
+usersRouter.route("/")
+  .get(getUsers)
+  .post(postUser)
+  .patch((req, res) => { res.status(200).send("This endpoint does nothing!") })
+  .delete((req, res) => { res.status(200).send("This endpoint does nothing!") })
+
+usersRouter.route("/:username")
   .get(getUser)
-  .patch((req, res) => {
-    res.status(200).send("All OK from PATCH /api/users/:id");
-  });
+  .post((req, res) => { res.status(200).send("This endpoint does nothing! POST to the /users endpoint or use PATCH instead") })
+  .patch(patchUser)
+  .delete(deleteUser)
+
+usersRouter.route("/:username/:infoType")
+  .get(getUserInfo)
+  .post((req, res) => { res.status(200).send(patch_msg) })                                         
+  .patch(patchUserInfo)
+  .delete((req, res) => { res.status(200).send(patch_msg) })
 
 module.exports = usersRouter;

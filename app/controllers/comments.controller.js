@@ -1,10 +1,12 @@
 const {
   queryAllComments,
   queryCommentById,
-  insertComment,
+  insertIntoComments,
+  updateComment,
   deleteFromComments,
 } = require("../models/comments.model");
 
+// GET
 const getComments = (req, res, next) => {
   return queryAllComments().then((comments) => {
     res.status(200).send({ comments: comments });
@@ -17,11 +19,22 @@ const getCommentById = (req, res, next) => {
   });
 };
 
+const getCommentsByArticle = (req, res, next) => {
+
+}
+
+const getCommentsByUser = (req, res, next) => {
+
+}
+
+
+
+// POST
 const postComment = (req, res, next) => {
   const { article_id } = req.params;
   const { username, body } = req.body;
 
-  return insertComment(article_id, username, body)
+  return insertIntoComments(article_id, username, body)
     .then((comment) => {
       // if (!comment) {
       //   return res.status(404).send({ msg: "404: Not Found" });
@@ -33,6 +46,16 @@ const postComment = (req, res, next) => {
       next(err);
     });
 };
+
+
+
+// PATCH
+const patchComment = (req, res, next) => {
+  const { article_id, comment_id } = req.params
+
+  return patchComment()
+}
+
 
 const deleteComment = (req, res, next) => {
   const { comment_id } = req.params;
@@ -47,7 +70,8 @@ const deleteComment = (req, res, next) => {
 
 module.exports = {
   getComments,
-  getCommentById,
+  getCommentById, getCommentsByArticle, getCommentsByUser,
   postComment,
+  patchComment,
   deleteComment,
 };

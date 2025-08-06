@@ -1,17 +1,34 @@
 module.exports = [
   {
-    description: "The man, the Mitch, the legend",
     slug: "mitch",
+    creator: "lurker",
+    description: "The man, the Mitch, the legend",
+    subscribers: [],
     img_url: "",
+    created_at: 1583025180000
   },
   {
-    description: "Not dogs",
     slug: "cats",
+    creator: "lurker",
+    description: "Not dogs",
+    subscribers: [],
     img_url: "",
+    created_at: 1583025180000
   },
   {
-    description: "what books are made of",
     slug: "paper",
+    creator: "lurker",
+    description: "what books are made of",
+    subscribers: [],
     img_url: "",
+    created_at: 1583025180000
   },
+  {
+    slug: "coding",
+    creator: "lurker",
+    description: "",
+    subscribers: ["gmharper", "mhgarper"],
+    img_url: "",
+    created_at: 1583025180000
+  }
 ];

@@ -1,54 +1,32 @@
 const {
-  getArticles,
-  getArticleById,
-  getCommentsByArticle,
-  patchArticle,
+  getArticles, getArticleById, getArticleInfo, getArticlesByTopic, getArticlesByUser,
+  postArticle,
+  patchArticle, patchArticleInfo,
   deleteArticle,
 } = require("../controllers/articles.controller");
 
-const {
-  getComments,
-  getCommentById,
-  postComment,
-  deleteComment,
-} = require("../controllers/comments.controller");
-
 const articlesRouter = require("express").Router();
 
+const patch_msg = "This endpoint does nothing! Use PATCH instead"
+
 // /articles
-articlesRouter
-  .route("/")
+articlesRouter.route("/")
   .get(getArticles)
-  .post((req, res) => {
-    res.status(200).send({ msg: "All OK from POST /api/articles" });
-  })
-  .patch((req, res) => {
-    res.status(200).send({ msg: "All OK from PATCH /api/articles" });
-  });
+  .post(postArticle)
+  .patch((req, res) => { res.status(200).send("This endpoint does nothing!") })
+  .delete((req, res) => { res.status(200).send("This endpoint does nothing!") })
 
 // /articles/:article_id
-articlesRouter
-  .route("/:article_id")
+articlesRouter.route("/:article_id")
   .get(getArticleById)
-  .post((req, res) => {
-    const { article_id } = req.params;
-    res
-      .status(201)
-      .send({ msg: `All OK from POST /api/articles/${article_id}` });
-  })
+  .post(() => { res.status(200).send("This endpoint does nothing! POST to the /articles endpoint or use PATCH instead") })
   .patch(patchArticle)
   .delete(deleteArticle);
 
-// /articles/:article_id/comments
-articlesRouter
-  .route("/:article_id/comments")
-  .get(getCommentsByArticle)
-  .post(postComment)
-  .patch((req, res) => {
-    const { article_id } = req.params;
-    res
-      .status(200)
-      .send(`All OK from PATCH /api/articles/${article_id}/comments`);
-  });
+articlesRouter.route("/:article_id/:infoType")
+  .get(getArticleInfo)
+  .post((req, res) => { res.status(200).send( { msg, patch_msg }) })
+  .patch(patchArticleInfo)
+  .delete((req, res) => { res.status(200).send( { msg, patch_msg }) })
 
 module.exports = articlesRouter;

@@ -1,10 +1,10 @@
-const db = require("../db/connection.js");
+const db = require("../../db/connection.js");
 const request = require("supertest");
-const app = require("../app/api.js");
+const app = require("../../app/api.js");
 require("jest-sorted");
 
-const data = require("../db/data/test-data");
-const seed = require("../db/seeds/seed.js");
+const data = require("../../db/data/test-data/index.js");
+const seed = require("../../db/seeds/seed.js");
 
 beforeEach(() => {
   return seed(data);
