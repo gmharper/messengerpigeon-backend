@@ -10,7 +10,7 @@ const {
 
 // GET
 const getArticles = (req, res, next) => {
-  const Queries = ["topic", "author", "sort", "order", "page", "limit", "only"]; // valid queries
+  const Queries = ["topic", "author", "sort", "order", "p", "limit", "only"]; // valid queries
 
   for (const key in req.query) {
     if (!Queries.includes(key)) {
@@ -18,9 +18,9 @@ const getArticles = (req, res, next) => {
       return Promise.reject({ status: 400, err_msg: "Invalid Query" });
     }
   }
-  const { topic, author, sort, order, page, limit, only } = req.query;
+  const { topic, author, sort, order, p, limit, only } = req.query;
 
-  return queryAllArticles(topic, author, sort, order, page, limit, only)
+  return queryAllArticles(topic, author, sort, order, p, limit, only)
     .then((articles) => {
       if (!articles) {
         return res.status(404).send({ err_msg: "404: Not Found" });

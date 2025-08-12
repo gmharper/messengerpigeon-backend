@@ -9,7 +9,7 @@ const {
 
 // GET
 const getUsers = (req, res, next) => {
-  const Queries = ["sort", "order", "page", "limit", "only"]; // valid queries
+  const Queries = ["sort", "order", "p", "limit", "only"]; // valid queries
 
   for (const key in req.query) {
     if (!Queries.includes(key)) {
@@ -17,9 +17,9 @@ const getUsers = (req, res, next) => {
       return Promise.reject({ status: 400, msg: "Invalid Query" });
     }
   }
-  const { sort, order, page, limit, only } = req.query;
+  const { sort, order, p, limit, only } = req.query;
 
-  return queryAllUsers(sort, order, page, limit, only)
+  return queryAllUsers(sort, order, p, limit, only)
     .then((users) => {
       return res.status(200).send({ users: users, msg: "Successfully retrieved users" });
     })

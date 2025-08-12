@@ -8,7 +8,7 @@ const {
 
 // GET
 const getComments = (req, res, next) => {
-  const Queries = ["username", "article_id", "sort", "order", "page", "limit", "only"]; // valid queries
+  const Queries = ["username", "article_id", "sort", "order", "p", "limit", "only"]; // valid queries
 
   for (const key in req.query) {
     if (!Queries.includes(key)) {
@@ -16,9 +16,9 @@ const getComments = (req, res, next) => {
       return Promise.reject({ status: 400, msg: "Invalid Query" });
     }
   }
-  const { username, article_id, sort, order, page, limit, only } = req.query;
+  const { username, article_id, sort, order, p, limit, only } = req.query;
 
-  return queryAllComments(username, article_id, sort, order, page, limit, only)
+  return queryAllComments(username, article_id, sort, order, p, limit, only)
     .then((comments) => {
       return res.status(200).send({ comments: comments });
     })

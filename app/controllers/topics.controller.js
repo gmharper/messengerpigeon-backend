@@ -8,7 +8,7 @@ const {
 
 // GET
 const getTopics = (req, res, next) => {
-  const Queries = ["created_by", "sort", "order", "page", "limit", "only"]; // valid queries
+  const Queries = ["created_by", "sort", "order", "p", "limit", "only"]; // valid queries
 
   for (const key in req.query) {
     if (!Queries.includes(key)) {
@@ -16,9 +16,9 @@ const getTopics = (req, res, next) => {
       return Promise.reject({ status: 400, msg: "Invalid Query" });
     }
   }
-  const { created_by, sort, order, page, limit, only } = req.query;
+  const { created_by, sort, order, p, limit, only } = req.query;
 
-  return queryAllTopics(created_by, sort, order, page, limit, only)
+  return queryAllTopics(created_by, sort, order, p, limit, only)
     .then((topics) => {
       if (!topics) {
         return res.status(404).send({ topics: topics, msg: "404: Not Found" });
@@ -154,7 +154,7 @@ const patchTopicData = (req, res, next) => {
 // DELETE
 const deleteTopic = (req, res, next) => {
   const { slug } = req.params
-  
+
   return deleteFromTopics(slug)
     .then((deletedTopic) => {
       res.status(204).send( { topic: deletedTopic, msg: `Successfully deleted topic ${slug}`})
