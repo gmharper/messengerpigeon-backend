@@ -26,7 +26,6 @@ const queryAllUsers = (sort="followers_count", order="DESC", page=0, limit=20, o
   }
 
   let queryString = "SELECT * FROM users"
-  let queryArray = []
 
   switch (sort) {
     case "articles_count":

@@ -18,10 +18,10 @@ const queryAllArticles = (topic="", author="", sort="created_at", order="DESC", 
   if (order && !Orders.includes(order)) {
     return Promise.reject({ status: 400, msg: "Invalid Order" });
   }
-  if (typeof page !== "number") {
+  if (typeof Number(page) !== "number") {
     return Promise.reject({ status: 400, msg: "Invalid Page" });
   }
-  if (typeof limit !== "number") {
+  if (typeof Number(limit) !== "number") {
     return Promise.reject({ status: 400, msg: "Invalid Page Limit" });
   }
 
