@@ -73,9 +73,9 @@ const queryCommentsData = (dataType) => {
 // GET SPECIFIC COMMENT
 const queryCommentById = (comment_id) => {
   return db
-    .query("SELECT * FROM comments WHERE comment_id = $1", [comment_id])
+    .query("SELECT * FROM comments WHERE comment_id = $1;", [comment_id])
     .then((result) => {
-      return result.rows;
+      return result.rows[0];
     })
 };
 
