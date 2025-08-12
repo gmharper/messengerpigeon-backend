@@ -1,14 +1,90 @@
 const db = require("../../db/connection");
 
-
 // GET ALL USERS
-const queryAllUsers = () => {
+const queryAllUsers = (sort="followers_count", order="DESC", page=1, limit=20, only="") => {
+  const Sorts = [
+    "username", "name", "email",
+    "description",
+    "profile_colour",
+    "created_at",
+    "articles_count", "comments_count", "subscribed_topics_count",
+    "followers_count", "following_count",
+    "voted_articles_count", "voted_comments_count"
+  ];
+  const Orders = ["ASC", "DESC"];
+
+  if (sort && !Sorts.includes(sort)) {
+    return Promise.reject({ status: 400, msg: "Invalid Sort" });
+  }
+  if (order && !Orders.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Invalid Order" });
+  }
+  if (typeof page !== "number") {
+    return Promise.reject({ status: 400, msg: "Invalid Page" });
+  }
+  if (typeof limit !== "number") {
+    return Promise.reject({ status: 400, msg: "Invalid Page Limit" });
+  }
+
+  let queryString = "SELECT * FROM users"
+  let queryArray = []
+
+  switch (sort) {
+    case "articles_count":
+      queryString += ` ORDER BY cardinality(articles) ${order}`
+      break;
+    case "comments_count":
+      queryString += ` ORDER BY cardinality(comments) ${order}`
+      break;
+    case "subscribed_topics_count":
+      queryString += ` ORDER BY cardinality(subscribed_topics) ${order}`
+      break;
+    case "followers_count":
+      queryString += ` ORDER BY cardinality(followers) ${order}`
+      break;
+    case "following_count":
+      queryString += ` ORDER BY cardinality(following) ${order}`
+      break;
+    case "voted_articles_count":
+      queryString += ` ORDER BY cardinality(voted_articles) ${order}`
+      break;
+    case "voted_comments_count":
+      queryString += ` ORDER BY cardinality(voted_comments) ${order}`
+      break;
+    default:
+      queryString += ` ORDER BY ${sort} ${order}`
+  }
+
+  queryString += ` OFFSET ${page*limit} LIMIT ${limit}`
+
   return db
-    .query("SELECT * FROM users")
+    .query(queryString)
     .then((result) => {
       return result.rows;
     });
 };
+
+const queryUsersData = (dataType) => {
+  const dataTypes = [
+    "username", "name", "email",
+    "description",
+    "profile_colour", "avatar_img_url", "banner_img_url",
+    "articles", "comments", "subscribed_topics",
+    "followers", "following",
+    "voted_articles", "voted_comments",
+    "created_at",
+  ]
+
+  if (!dataTypes.includes(dataType)) return Promise.reject({ status: 400, msg: "400: Invalid dataType" })
+
+  let queryString = `SELECT username, ${dataType} FROM users`
+
+  return db
+    .query(queryString)
+    .then((result) => {
+      return result.rows
+    })
+}
 
 // GET USER BY USERNAME
 const queryUserByUsername = (username) => {
@@ -20,22 +96,18 @@ const queryUserByUsername = (username) => {
 }
 
 // GET SPECIFIC USER INFO
-const queryUserInfo = (username, infoType) => {
-  const infoTypes = [
-    "username", "name", "email",
-    "description",
-    "profile_colour", "avatar_img_url", "banner_img_url",
+const queryUserData = (username, dataType) => {
+  const dataTypes = [
+    "username", "name", "email", "description",
+    "profile_colour", "avatar_img_url", "banner_img_url", "banner_blend", "banner_position",
     "articles", "comments", "subscribed_topics",
-    "followers", "following",
-    "voted_articles", "voted_comments",
+    "followers", "following", "voted_articles", "voted_comments",
     "created_at"
   ]
 
-  if (infoType && !infoTypes.includes(infoType)) {
-    return Promise.reject({ status: 400, msg: "400: Invalid infoType" });
-  }
+  if (!dataTypes.includes(dataType)) return Promise.reject({ status: 400, msg: "400: Invalid dataType" })
 
-  let queryString = `SELECT ${infoType} FROM users ` +"WHERE username = $1"
+  let queryString = `SELECT ${dataType} FROM users ` +"WHERE username = $1"
 
   return db
     .query(queryString, [username])
@@ -45,44 +117,44 @@ const queryUserInfo = (username, infoType) => {
 }
 
 /////////////////////////
-const queryUserInfoCount = (username, infoCountType) => {
-  const infoCountTypes = [
+const queryUserDataCount = (username, countType) => {
+  const countTypes = [
     "articles_count", "comments_count",
     "subscribed_topics_count",
     "followers_count", "following_count",
     "voted_articles_count", "voted_comments_count"
   ]
 
-  if (infoCountType && !infoCountTypes.includes(infoCountType)) {
-    return Promise.reject({ status: 400, msg: "400: Invalid infoType" });
+  if (countType && !countTypes.includes(countType)) {
+    return Promise.reject({ status: 400, msg: "400: Invalid countType" });
   }
 
-  let infoType = ""
-  switch (infoCountType) {
+  let dataType = ""
+  switch (countType) {
     case "articles_count":
-      infoType = "articles"
+      dataType = "articles"
       break;
     case "comments_count":
-      infoType = "comments"
+      dataType = "comments"
       break;
     case "subscribed_topics_count":
-      infoType = "subscribed_topics"
+      dataType = "subscribed_topics"
       break;
     case "followers_count":
-      infoType = "followers"
+      dataType = "followers"
       break;
     case "following_count":
-      infoType = "following"
+      dataType = "following"
       break;
     case "voted_articles_count":
-      infoType = "voted_articles"
+      dataType = "voted_articles"
       break;
     case "voted_comments_count":
-      infoType = "voted_comments"
+      dataType = "voted_comments"
       break;
   }
 
-  let queryString = `SELECT cardinality(${infoType}) FROM users ` +"WHERE username = $1"
+  let queryString = `SELECT cardinality(${dataType}) FROM users ` +"WHERE username = $1;"
 
   return db
     .query(queryString, [username])
@@ -96,20 +168,28 @@ const queryUserInfoCount = (username, infoCountType) => {
 const insertIntoUsers = (user) => {
   //destructure user
   const { 
-    username, 
-    name, 
-    email,
-    description, 
-    profile_colour, 
-    avatar_img_url, 
-    banner_img_url,
+    username, name, email, description, 
+    profile_colour, avatar_img_url, banner_img_url, banner_blend, banner_position,
+    comments, articles, subscribed_topics,
+    followers, following,
+    voted_articles, voted_comments
    } = user 
 
   return db
     .query(
-      "INSERT INTO users (username, name, email, description, profile_colour, avatar_img_url, banner_img_url) "+ 
-      "VALUES ($1, $2, $3) RETURNING *;",
-      [username, name, description]
+      "INSERT INTO users (username, name, email, description, " +
+      "profile_colour, avatar_img_url, banner_img_url, banner_blend, banner_position, " + 
+      "comments, articles, subscribed_topics, " +
+      "followers, following, voted_articles, voted_comments) " +
+      "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING *;",
+      [
+        username, name, email, description, 
+        profile_colour, avatar_img_url, 
+        banner_img_url, banner_blend, banner_position,
+        comments, articles, subscribed_topics,
+        followers, following,
+        voted_articles, voted_comments
+      ]
     )
     .then((result) => {
       return result.rows[0];
@@ -120,44 +200,55 @@ const insertIntoUsers = (user) => {
 // PATCH USER
 const updateUser = (username, user) => {
   // destructure user
-  const {} = user
+  const { 
+    name, email, description, 
+    profile_colour, avatar_img_url, banner_img_url, banner_blend, banner_position,
+    comments, articles, subscribed_topics,
+    followers, following,
+    voted_articles, voted_comments
+   } = user 
 
   return db
     .query(
-      "UPDATE users () VALUES () WHERE username = $1", [username]
+      "UPDATE users SET name=$2, email=$3, description=$4, " +
+      "profile_colour=$5, avatar_img_url=$6, banner_img_url=$7, banner_blend=$8, banner_position=$9, " +
+      "comments=$10, articles=$11, subscribed_topics=$12, " +
+      "followers=$13, following=$14, voted_articles=$15, voted_comments=$16 " +
+      "WHERE username = $1 RETURNING *;", 
+      [
+        username, name, email, description,
+        profile_colour, avatar_img_url, banner_img_url, banner_blend, banner_position,
+        comments, articles, subscribed_topics,
+        followers, following,
+        voted_articles, voted_comments
+      ]
     )
     .then((result) => {
       return result.rows[0]
     })
 };
 
-const updateUserFollowing = (username, updatedFollowingArray) => {
-  return db
-    .query(
-      "UPDATE USERS SET following=$2 WHERE username = $1", [username, updatedFollowingArray]
-    )
-}
+//////////////////////
+const updateUserData = (username, dataType, data) => {
+  const dataTypes = [
+    "name", "email", "description",
+    "profile_colour", "avatar_img_url", "banner_img_url", "banner_blend", "banner_position",
+    "articles", "comments", "subscribed_topics",
+    "followers", "following",
+    "voted_articles", "voted_comments"
+  ]
 
-const updateUserFollowers = (username, updatedFollowersArray) => {
-  return db
-    .query(
-      "UPDATE USERS SET followers=$2 WHERE username = $1", [username, updatedFollowersArray]
-    )
-}
+  if (!dataTypes.includes(dataType)) return Promise.reject({ status: 400, err_msg: "Invalid dataType" })
 
-const updateUserArticles = (username, updatedArticlesArray) => {
-  return db
-  .query(
-    "UPDATE USERS SET articles=$2 WHERE username = $1", [username, updatedArticlesArray]
-  )
-}
+  let queryString = `UPDATE users SET ${dataType}=$2` +" WHERE username = $1 RETURNING *;"
 
-const updateUserComments = (username, updatedCommentsArray) => {
   return db
-  .query(
-    "UPDATE USERS SET comments=$2 WHERE username = $1", [username, updatedCommentsArray]
-  )
+    .query(queryString, [username, data])
+    .then((result) => {
+      return result.rows[0]
+    })
 }
+  
 
 
 // DELETE USER
@@ -171,8 +262,9 @@ const deleteFromUsers = (username) => {
 
 
 module.exports = {
-  queryAllUsers, queryUserByUsername, queryUserInfo, queryUserInfoCount,
+  queryAllUsers, queryUsersData,
+  queryUserByUsername, queryUserData, queryUserDataCount,
   insertIntoUsers,
-  updateUser, updateUserFollowing, updateUserFollowers, updateUserArticles, updateUserComments,
+  updateUser, updateUserData,
   deleteFromUsers,
 };

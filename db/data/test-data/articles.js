@@ -4,8 +4,8 @@ module.exports = [
     topic: "mitch",
     author: "butter_bridge",
     body: "I find this existence challenging",
-    comments: [],
-    voted_by: ["suckaduck", "fuckoff"],
+    comments: ["a", "b", "c", "d"],
+    voted_by: ["a", "b", "c"],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
     created_at: 1594329060000
@@ -93,7 +93,7 @@ module.exports = [
     author: "butter_bridge",
     body: "Well? Think about it.",
     comments: [],
-    voted_by: [],
+    voted_by: ["x", "y", "z"],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
     created_at: 1591438200000  
@@ -137,7 +137,7 @@ module.exports = [
     author: "butter_bridge",
     body: "There will never be enough articles about Mitch!",
     comments: [],
-    voted_by: [],
+    voted_by: ["a", "b", "c", "d"],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
     created_at: 1602419040000

@@ -28,7 +28,7 @@ describe("GET /api/topics", () => {
             expect.objectContaining({
               slug: expect.any(String),
               type: expect.any(String),
-              creator: expect.any(String),
+              created_by: expect.any(String),
               description: expect.any(String),
               subscribers: expect.any(Array),
               img_url: expect.any(String),
@@ -59,15 +59,28 @@ describe("GET /api/topics/slug/:infoType", () => {
       .get("/api/topics/coding/slug")
       .expect(200)
       .then((response) => {
-        expect(response.body.info).toBe("coding")
+        expect(response.body.data).toBe("coding")
       });
   })
   test("200: returns subscribers count", () => {
     return request(app)
-      .get("/api/topics/coding/subscriber_count")
+      .get("/api/topics/coding/subscribers_count")
       .expect(200)
       .then((response) => {
         expect(response.body.count).toBe(2)
+      })
+  })
+  test("200: returns available topicdata endpoints", () => {
+    return request(app)
+      .get("/api/topics/0/endpoints")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.endpoints).toEqual(
+          [
+            "slug", "description", "created_by", "subscribers", "img_url", "created_at",
+            "subscribers_count"
+        ]
+        )
       })
   })
 })
@@ -94,7 +107,7 @@ describe("bad requests",() => {
       .get("/api/topics/coding/banana")
       .expect(400)
       .then((response) => {
-        expect(response.body.msg).toBe("400: Invalid infoType");
+        expect(response.body.msg).toBe("400: Invalid dataType");
       });
   });
 });

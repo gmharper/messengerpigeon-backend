@@ -2,23 +2,87 @@
   "GET /api": {
     "description": "serves up a json representation of all the available endpoints of the api"
   },
+
+
   "GET /api/users": {
-    "description": "serves an array of all users",
-    "exampleResponse": {
+    "description": "serves an array of ALL users",
+    "exampleResponse": [{}, {}, {}]
+  },
+  "GET /api/users/username": {
+    "description": "returns an array of ALL usernames",
+    "exampleResponse": ["tickle122", "lurker"]
+  },
+  "GET /api/users/:username" : {
+    "description": "returns a user object",
+      "exampleResponse": {
       "username": "tickle122",
       "name": "Tom Tickle",
-      "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
+      "email": "",
+      "description": "",
+      "profile_colour": "",
+      "avatar_img_url":
+        "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
+      "banner_img_url": "",
+      "articles": [],
+      "comments": [],  
+      "subscribed_topics": [],
+      "followers": [],
+      "following": [],
+      "voted_articles": [],
+      "voted_comments": [],
+      "created_at": ""
     }
   },
+  "GET /api/users/:username/:data": {
+    "description": "returns a specific piece of information from the user object",
+    "types": [
+      "username", "name", "email", 
+      "profile_colour", "avatar_img_url", "banner_img_url", 
+      "comments", "articles", "subscribed_topics", "followers", "following",
+      "voted_comments", "voted_articles",
+      "created_at"
+    ]
+  },
+  "GET /api/users/:username/:count": {
+    "description": "returns a count of an array on the user object",
+    "types": [
+      "comments_count", "articles_count", "subscribed_topics_count", 
+      "followers_count", "following_count", 
+      "voted_comments_count", "voted_articles_count"
+    ]
+  },
+  "POST /api/users": {},
+  "PATCH /api/users/:username": {},
+  "PATCH /api/users/:username/:data": {},
+  "DELETE /api/users/:username": {},
+
+
   "GET /api/topics": {
-    "description": "serves an array of all topics",
+    "description": "serves an array of ALL topics",
     "queries": [],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
+  "GET /api/topics/slug": {
+    "description": "returns an array of ALL topic slugs",
+    "exampleResponse": ["football", "coding", "sports"]
+  },
+  "GET /api/topics/:slug": {},
+  "GET /api/topics/:slug/:data": {
+    "types": ["slug", "description", "created_by", "subscribers", "img_url", "created_at"]
+  },
+  "GET /api/topics/:slug/:count": {
+    "types": ["subscribers_count"]
+  },
+  "POST /api/topics": {},
+  "PATCH /api/topics/:slug": {},
+  "PATCH /api/topics/:slug/:data": {},
+  "DELETE /api/topics/:slug": {},
+
+
   "GET /api/articles": {
-    "description": "serves an array of all articles",
+    "description": "serves an array of ALL articles",
     "queries": ["sort_by", "order", "topic"],
     "exampleRequest": "/api/articles?sort_by=author&order=ASC&topic=cooking",
     "exampleResponse": {
@@ -33,6 +97,13 @@
         }
       ]
     }
+  },
+  "GET /api/articles/article_id": {
+    "description": "returns an array of ALL article_id's with their corresponding titles",
+    "exampleResponse": [
+      { "article_id": "1", "article_title": "Living in the shadow of a great man" }, 
+      { "article_id": "2", "article_title": "Sony Vaio; or, The Laptop" }
+    ]
   },
   "GET /api/articles/:article_id": {
     "description": "serves an article by its id",
@@ -50,26 +121,53 @@
       }
     }
   },
-  "GET /api/articles/:article_id/comments": {
+  "GET /api/articles/:article_title NOT IMPLEMENTED": {
+    "description": "serves an article by its title"
+  },
+  "GET /api/articles/:username": {
+    "description": "gets all articles by a specific user"
+  },
+  "GET /api/articles/:slug": {
+    "description": "gets all articles by a specific topic"
+  },
+  "GET /api/articles/:article_id/:data": {
     "description:": "",
     "exampleRequest": "/api/articles/3/comments",
     "exampleResponse": {}
   },
-  "POST /api/articles/:article_id/comment": {
-    "description": "posts a new comment to the article",
-    "exampleResponse": {}
-  },
-  "POST /api/articles": {
-    "description": "patches an article by updating its vote count",
-    "exampleResponse": {}
-  },
+  "GET /api/articles/:article_id/:count": {},
+  "POST /api/articles": {},
   "PATCH /api/articles/:article_id": {
-    "description": "",
-    "exampleRequest": "",
-    "exampleResponse": {}
+    "description": "replaces the specific article with an updated article object"
   },
-  "DELETE /api/comments/:comment_id": {
-    "description": "deletes the comment by its id",
-    "exampleResponse": "204: No Content"
-  }
+  "PATCH /api/articles/:article_id/:data": {
+    "description": "replaces the specific article data with updated input data"
+  },
+  "DELETE /api/articles/:article_id": {},
+
+
+  "GET /api/comments": {},
+  "GET /api/comments/comment_id": {
+    "description": "returns an array containing ALL comment_id's with their corresponding article_id",
+    "exampleResponse": [ 
+      { "comment_id": "1", "article_id": "Living in the shadow of a great man" }, 
+      { "comment_id": "2", "article_id": "Living in the shadow of a great man" } 
+    ]
+  },
+  "GET /api/comments/:comment_id": {},
+  "GET /api/comments/:comment_id/:data": {},
+  "GET /api/comments/:comment_id/:count": {},
+  "GET /api/comments/:article_id": {
+    "description": "get all comments by a specific article"
+  },
+  "GET /api/comments/:username": {
+    "description": "gets all comments by a specific user"
+  },
+  "POST /api/comments": {},
+  "PATCH /api/comments/:comment_id": {},
+  "PATCH /api/comments/:comment_id/:data": {},
+  "DELETE /api/comments/:comment_id": {}
 }
+
+
+

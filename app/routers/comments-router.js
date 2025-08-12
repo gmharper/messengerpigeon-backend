@@ -1,8 +1,8 @@
 const {
-  getComments,
-  getCommentById, getCommentsByUser, getCommentsByArticle,
+  getComments, getCommentsData,
+  getCommentById, getCommentData, getCommentsByUser, getCommentsByArticle,
   postComment,
-  patchComment,
+  patchComment, patchCommentData,
   deleteComment,
 } = require("../controllers/comments.controller");
 
@@ -17,11 +17,8 @@ commentsRouter.route("/")
   .patch(() => { res.status(200).send("This endpoint does nothing!") })
   .delete(() => { res.status(200).send("This endpoint does nothing!") })
 
-commentsRouter.route("/:username")
-  .get(getCommentsByUser)
-
-commentsRouter.route("/:article_id")
-  .get(getCommentsByArticle)
+commentsRouter.route("/data/:dataType")
+  .get(getCommentsData)
 
 // /comments/:comment_id
 commentsRouter.route("/:comment_id")
@@ -30,7 +27,11 @@ commentsRouter.route("/:comment_id")
   .patch(patchComment)                // patch by: votes,
   .delete(deleteComment);
 
-commentsRouter.route("/:comment_id/:infoType")
+commentsRouter.route("/:comment_id/:dataType")
+  .get(getCommentData)
+  .post((req, res) => { res.status(200).send(patch_msg) })
+  .patch(patchCommentData)
+  .delete((req, res) => { res.status(200).send(patch_msg) })
 
 
 module.exports = commentsRouter;

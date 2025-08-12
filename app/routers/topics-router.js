@@ -1,7 +1,8 @@
 const { 
-  getTopics, getTopicBySlug, getTopicInfo,
+  getTopics, getTopicsData,
+  getTopicBySlug, getTopicData,
   postTopic,
-  patchTopic, patchTopicInfo,
+  patchTopic, patchTopicData,
   deleteTopic 
 } = require("../controllers/topics.controller");
 
@@ -15,16 +16,19 @@ topicsRouter.route("/")
   .patch((req, res) => { res.status(200).send("This endpoint does nothing!") })
   .delete((req, res) => { res.status(200).send("This endpoint does nothing!") })
 
+topicsRouter.route("/data/:dataType")
+  .get(getTopicsData)
+
 topicsRouter.route("/:slug")
   .get(getTopicBySlug)
   .post(() => { res.status(200).send("This endpoint does nothing! POST to the /topics endpoint or use PATCH instead") })
   .patch(patchTopic)
   .delete(deleteTopic)
 
-topicsRouter.route("/:slug/:infoType")
-  .get(getTopicInfo)
-  .post((req, res) => { res.status(200).send(patch_msg) })
-  .patch(patchTopicInfo)
-  .delete((req, res) => { res.status(200).send(patch_msg) })
+topicsRouter.route("/:slug/:dataType")
+  .get(getTopicData)
+  .post((req, res) => { res.status(200).send({ msg: patch_msg }) })
+  .patch(patchTopicData)
+  .delete((req, res) => { res.status(200).send({ msg: patch_msg }) })
 
 module.exports = topicsRouter;

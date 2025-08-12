@@ -43,6 +43,73 @@ describe("GET /api/articles", () => {
   });
 });
 
+describe("GET /api/articles queries", () => {
+  test("GET /api/articles?author=", () => {
+    return request(app)
+      .get("/api/articles?author=butter_bridge")
+      .expect(200)
+      .then((response) => {
+        //console.log(response.body.articles)
+      })
+  })
+  test("GET /api/articles", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then((response) => {
+        //console.log(response.body.articles)
+      })
+  })
+
+  test("GET /api/articles?sort=title&order=ASC", () => {
+    return request(app)
+      .get("/api/articles?sort=title&order=ASC")
+      .expect(200)
+      .then((response) => {
+        //console.log(response.body.articles)
+      })
+  })
+
+  test("GET /api/articles?topic=mitch&author=butter_bridge&sort=title&order=ASC", () => {
+     return request(app)
+      .get("/api/articles?topic=mitch&author=butter_bridge&sort=title&order=ASC")
+      .expect(200)
+      .then((response) => {
+        //console.log(response.body.articles)
+      })
+  })
+})
+
+///////////////////////////////////////
+describe("GET /api/data", () => {
+  test("200: returns the article titles", () => {
+    return request(app)
+      .get("/api/articles/data/title")
+      .expect(200)
+      .then((response) => {
+        //console.log(response.body)
+      })
+  })
+
+  test("200: returns the article comments", () => {
+    return request(app)
+      .get("/api/articles/data/comments")
+      .expect(200)
+      .then((response) => {
+        //console.log(response.body)
+      })
+  })
+
+  test("200: returns the article topics", () => {
+    return request(app)
+      .get("/api/articles/data/topic")
+      .expect(200)
+      .then((response) => {
+        //console.log(response.body)
+      })
+  })
+})
+
 ///////////////////////////////////////
 describe("GET /api/articles/:article_id", () => {
   test("200: returns the article object", () => {
@@ -50,7 +117,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/3")
       .expect(200)
       .then((response) => {
-        console.log(response.body.article)
+        //console.log(response.body.article)
       });
   })
 })
@@ -62,12 +129,12 @@ describe("GET /api/articles/:article_id/:infoType", () => {
       .get("/api/articles/3/comments")
       .expect(200)
       .then((response) => {
-        expect(response.body.info.length).toBe(3)
+        expect(response.body.data.length).toBe(3)
       });
   })
   test("200: returns comment count", () => {
     return request(app)
-      .get("/api/articles/3/comment_count")
+      .get("/api/articles/3/comments_count")
       .expect(200)
       .then((response) => {
         expect(response.body.count).toBe(3)
@@ -75,21 +142,52 @@ describe("GET /api/articles/:article_id/:infoType", () => {
   })
   test("200: returns vote count", () => {
     return request(app)
-      .get("/api/articles/3/vote_count")
+      .get("/api/articles/3/votes_count")
       .expect(200)
       .then((response) => {
         expect(response.body.count).toBe(2)
       })
   })
+  test("200: returns available articledata endpoints", () => {
+    return request(app)
+      .get("/api/articles/0/endpoints")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.endpoints).toEqual(
+          [
+            "article_id", "title", "body", "author", "voted_by", "comments", "img_url", "created_at",
+            "comments_count", "votes_count"
+          ]
+        )
+      })
+  })
 })
 
 describe("bad requests",() => {
+  test("400: VERY bad request", () => {
+    return request(app)
+      .get("/api/articles/DROP TABLE IF EXISTS articles")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.err_msg).toBe("400: Bad Request");
+      });
+  });
+
+  test("400: VERY bad request", () => {
+    return request(app)
+      .get("/api/articles/3/DROP TABLE IF EXISTS articles")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.err_msg).toBe("400: Invalid dataType");
+      });
+  });
+
   test("400: Bad Request when passed an id that is not valid", () => {
     return request(app)
       .get("/api/articles/banana/comments")
       .expect(400)
       .then((response) => {
-        expect(response.body.msg).toBe("400: Bad Request");
+        expect(response.body.err_msg).toBe("400: Invalid dataType");
       });
   });
   test("404: Not Found when given a number that exceeds the number of articles", () => {
@@ -97,7 +195,7 @@ describe("bad requests",() => {
       .get("/api/articles/4454634/comments")
       .expect(404)
       .then((response) => {
-        expect(response.body.msg).toBe("404: Not Found");
+        expect(response.body.err_msg).toBe("404: Not Found");
       });
   });
   test("404: Not Found when passed an infoType that doesn't exist", () => {
@@ -105,7 +203,7 @@ describe("bad requests",() => {
       .get("/api/articles/1/banana")
       .expect(400)
       .then((response) => {
-        expect(response.body.msg).toBe("400: Invalid infoType");
+        expect(response.body.err_msg).toBe("400: Invalid dataType");
       });
   });
 });

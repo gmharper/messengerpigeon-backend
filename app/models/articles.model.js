@@ -1,13 +1,14 @@
 const db = require("../../db/connection");
 
 // GET ALL ARTICLES
-const queryAllArticles = (topic='', username='', sort="created_at", order="DESC", page=0, limit=20) => {
+const queryAllArticles = (topic="", author="", sort="created_at", order="DESC", page=0, limit=20) => {
   const Sorts = [
     "article_id",
     "title",
     "topic",
     "author",
-    "created_at"
+    "created_at",
+    "votes_count",
   ];
   const Orders = ["ASC", "DESC"];
 
@@ -24,30 +25,51 @@ const queryAllArticles = (topic='', username='', sort="created_at", order="DESC"
     return Promise.reject({ status: 400, msg: "Invalid Page Limit" });
   }
 
-  let queryString = `SELECT * FROM articles`
+  let queryString = "SELECT * FROM articles"
   let queryArray = []
 
-  if (topic && username) { 
-    queryString += " WHERE topic=$1 AND username=$2" 
-    queryArray = [topic, username]
+  if (topic && author) {
+    queryString += " WHERE topic=$1 AND author=$2" 
+    queryArray = [topic, author]
   }
   else if (topic) { 
     queryString += " WHERE topic=$1"
     queryArray = [topic]
   }
-  else if (username) { 
-    queryString += " WHERE username=$1" 
-    queryArray = [username]
+  else if (author) { 
+    queryString += " WHERE author=$1" 
+    queryArray = [author]
   }
 
-  queryString += ` ORDER BY ${sort} ${order} OFFSET ${page*limit} LIMIT ${limit};`
+  if (sort==="votes_count") queryString += ` ORDER BY cardinality(voted_by) ${order}`
+  else queryString += ` ORDER BY ${sort} ${order}`
 
-  return db.query(
-    queryString,
-  ).then((result) => {
-    return result.rows;
-  });
+  queryString += ` OFFSET ${page*limit} LIMIT ${limit};`
+
+
+  return db.query(queryString, queryArray)
+    .then((result) => {
+      return result.rows;
+    });
 };
+
+
+/////////////////////
+const queryArticlesData = (dataType) => {
+  const dataTypes = [
+    "article_id","title","topic","author","body","comments","voted_by","img_url","created_at"
+  ]
+
+  if (!dataTypes.includes(dataType)) { return Promise.reject({ status: 400, msg: "Invalid dataType" })}
+
+  let queryString = `SELECT article_id, title, ${dataType} FROM articles`
+
+  return db
+    .query(queryString)
+    .then((result) => {
+      return result.rows
+    })
+}
 
 
 // GET SPECIFIC ARTICLE
@@ -61,24 +83,16 @@ const queryArticleById = (article_id) => {
 
 
 /////////////////
-const queryArticleInfo = (article_id, infoType) => {
-  const infoTypes = [
-    "article_id",
-    "title",
-    "topic",
-    "author",
-    "body",
-    "comments",
-    "voted_by",
-    "img_url",
-    "created_at"
+const queryArticleData = (article_id, dataType) => {
+  const dataTypes = [
+    "article_id","title","topic","author","body","comments","voted_by","img_url","created_at"
   ]
 
-  if (infoType && !infoTypes.includes(infoType)) {
-    return Promise.reject({ status: 400, msg: "400: Invalid infoType" });
+  if (dataType && !dataTypes.includes(dataType)) {
+    return Promise.reject({ status: 400, msg: "400: Invalid dataType" });
   }
 
-  let queryString = `SELECT ${infoType} FROM articles ` +"WHERE article_id = $1"
+  let queryString = `SELECT ${dataType} FROM articles ` +"WHERE article_id = $1"
 
   return db
     .query(queryString, [article_id])
@@ -88,97 +102,33 @@ const queryArticleInfo = (article_id, infoType) => {
 }
 
 
-const queryArticleInfoCount = (article_id, infoCountType) => {
-  const infoCountTypes = [
-    "comment_count",
-    "vote_count",
+const queryArticleDataCount = (article_id, countType) => {
+  const countTypes = [
+    "comments_count",
+    "votes_count",
   ]
 
-  if (infoCountType && !infoCountTypes.includes(infoCountType)) {
-    return Promise.reject({ status: 400, msg: "400: Invalid infoType" });
+  if (countType && !countTypes.includes(countType)) {
+    return Promise.reject({ status: 400, msg: "400: Invalid countType" });
   }
 
-  let infoType = ""
-  switch (infoCountType) {
-    case "comment_count":
-      infoType = "comments"
+  let dataType = ""
+  switch (countType) {
+    case "comments_count":
+      dataType = "comments"
       break;
-    case "vote_count":
-      infoType = "voted_by"
+    case "votes_count":
+      dataType = "voted_by"
       break;
   }
 
-  let queryString = `SELECT cardinality(${infoType}) FROM articles ` +"WHERE article_id = $1"
+  let queryString = `SELECT cardinality(${dataType}) FROM articles ` +"WHERE article_id = $1"
 
   return db
     .query(queryString, [article_id])
     .then((result) => {
       return result.rows[0]
     })
-}
-
-
-///////////////////
-const queryArticlesByUser = (username='', sort = "created_at", order = "DESC", page=0, limit=20, only='') => {
-  const Sorts = [
-    "article_id",
-    "title",
-    "topic",
-    "author",
-    "votes",
-    "comment_count",
-    "created_at",
-  ];
-  const Orders = ["ASC", "DESC"];
-
-  if (sort && !Sorts.includes(sort)) {
-    return Promise.reject({ status: 400, msg: "Invalid Sort" });
-  }
-  if (order && !Orders.includes(order)) {
-    return Promise.reject({ status: 400, msg: "Invalid Order" });
-  }
-  if (!username) {
-    return Promise.reject({ status: 400, msg: "Invalid Username" });
-  }
-
-  return db.query(
-    "SELECT * FROM ARTICLES WHERE author=$1 ORDER BY $2 $3 OFFSET $4 LIMIT $5;", 
-    [username, sort, order, page, limit])
-    .then((result) => {
-      return result.rows;
-  })
-};
-
-
-////////////////////////
-const queryArticlesByTopic = (topic="", sort="created_at", order="DESC", page=0, limit=20, only="") => {
-  const Sorts = [
-    "article_id",
-    "title",
-    "topic",
-    "author",
-    "votes",
-    "comment_count",
-    "created_at",
-  ];
-  const Orders = ["ASC", "DESC"];
-
-  if (sort && !Sorts.includes(sort)) {
-    return Promise.reject({ status: 400, msg: "Invalid Sort" });
-  }
-  if (order && !Orders.includes(order)) {
-    return Promise.reject({ status: 400, msg: "Invalid Order" });
-  }
-  if (!topic) {
-    return Promise.reject({ status: 400, msg: "Invalid Topic" });
-  }
-
-  return db.query(
-    "SELECT * FROM ARTICLES WHERE topic=$1 ORDER BY $2 $3 OFFSET $4 LIMIT $5;", 
-    [topic, sort, order, page, limit])
-    .then((result) => {
-      return result.rows;
-  })
 }
 
 
@@ -189,11 +139,10 @@ const insertIntoArticles = (article) => {
   const { title, topic, author, body, img_url, created_at } = article
 
   return db
-    .query(() => {
-      "INSERT INTO ARTICLES (title, topic, author, body, img_url, created_at) "+
-      "VALUES ($1 $2 $3 $4 $5 $6) RETURNING *", 
+    .query(
+      "INSERT INTO articles (title, topic, author, body, img_url, created_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;", 
       [title, topic, author, body, img_url, created_at]
-    })
+    )
     .then((result) => {
       return result.rows[0]
     })
@@ -203,32 +152,33 @@ const insertIntoArticles = (article) => {
 // PATCH ARTICLE
 const updateArticle = (article_id, article) => {
   // Destructure article
-  const {} = article
+  const {
+    title, topic, author, body, img_url
+  } = article
 
   return db
-    .query(() => {
-      "INSERT INTO ARTICLES () VALUES %L WHERE article_id = $1 RETURNING *", [article_id]
-    })
+    .query(
+      "UPDATE articles SET title=$2, topic=$3, author=$4, body=$5, img_url=$6 WHERE article_id = $1 RETURNING *;", 
+      [article_id, title, topic, author, body, img_url]
+    )
     .then((result) => {
       return result.rows[0]
     })
 }
 
-const updateArticleVotes = (article_id, votes) => {
-  return db
-    .qeury(() => {
-      "UPDATE ARTICLES SET votes=$2 WHERE article_id = $1", [article_id, votes]
-    })
-    .then((result) => {
-      return result.rows[0]
-    })
-}
+////////////////////////
+const updateArticleData = (article_id, dataType, data) => {
+  const dataTypes = [
+    "title", "topic", "author", "body", "img_url",
+    "voted_by", "comments"
+  ]
 
-const updateArticleComments = (article_id, commentsArray) => {
+  if (!dataTypes.includes(dataType)) return Promise.reject({ status: 400, err_msg: "Invalid dataType" })
+
+  let queryString = `UPDATE articles SET ${dataType}=$2` +" WHERE article_id = $1 RETURNING *;"
+
   return db
-    .query(() => {
-      "UPDATE ARTICLES SET comments=$2 WHERE article_id = $1", [article_id, commentsArray]
-    })
+    .query(queryString, [article_id, data])
     .then((result) => {
       return result.rows[0]
     })
@@ -248,8 +198,9 @@ const deleteFromArticles = (article_id) => {
 
 
 module.exports = {
-  queryAllArticles, queryArticleById, queryArticleInfo, queryArticleInfoCount, queryArticlesByUser, queryArticlesByTopic,
+  queryAllArticles, queryArticlesData,
+  queryArticleById, queryArticleData, queryArticleDataCount,
   insertIntoArticles,
-  updateArticle, updateArticleVotes, updateArticleComments,
+  updateArticle, updateArticleData,
   deleteFromArticles,
 };

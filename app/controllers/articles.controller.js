@@ -1,42 +1,46 @@
 
 const {
-  queryAllArticles, queryArticleById, queryArticleInfo, queryArticleInfoCount,
+  queryAllArticles, queryArticlesData,
+  queryArticleById, queryArticleData, queryArticleDataCount,
   insertIntoArticles,
-  updateArticle, updateArticleVotes, updateArticleComments, 
+  updateArticle, updateArticleData,
   deleteFromArticles,
-  queryArticlesByUser,
 } = require("../models/articles.model");
-
-const {
-  queryCommentCount,
-  queryCommentsByArticle,
-} = require("../models/comments.model");
 
 
 // GET
 const getArticles = (req, res, next) => {
-  const Queries = ["topic", "username", "sort", "order", "page", "limit", "only"]; // valid queries
+  const Queries = ["topic", "author", "sort", "order", "page", "limit", "only"]; // valid queries
 
   for (const key in req.query) {
     if (!Queries.includes(key)) {
       // if not a valid query paramater
-      return Promise.reject({ status: 400, msg: "Invalid Query" });
+      return Promise.reject({ status: 400, err_msg: "Invalid Query" });
     }
   }
-  const { topic, username, sort, order, page, limit, only } = req.query;
+  const { topic, author, sort, order, page, limit, only } = req.query;
 
-  return queryAllArticles(topic, username, sort, order, page, limit, only)
+  return queryAllArticles(topic, author, sort, order, page, limit, only)
     .then((articles) => {
       if (!articles) {
-        return res.status(404).send({ msg: "404: Not Found" });
+        return res.status(404).send({ err_msg: "404: Not Found" });
       } else {
         res.status(200).send({ articles: articles });
       }
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => { next(err) });
 };
+
+///////////////
+const getArticlesData = (req, res, next) => {
+  const { dataType } = req.params
+
+  return queryArticlesData(dataType)
+    .then((data) => {
+      return res.status(200).send({ data: data, msg: `Successfully retrieved ${dataType} from articles` })
+    })
+    .catch((err) => { next(err) })
+}
 
 
 ////////////////
@@ -46,7 +50,7 @@ const getArticleById = (req, res, next) => {
   return queryArticleById(article_id)
     .then((article) => {
       if (!article) {
-        return res.status(404).send({ msg: "404: Not Found" });
+        return res.status(404).send({ err_msg: "404: Not Found" });
       }
         return res.status(200).send({ article: article });
       })
@@ -55,100 +59,65 @@ const getArticleById = (req, res, next) => {
 
 
 //////////////////
-const getArticlesByTopic = (req, res, next) => {
-  const { topic } = req.params
-  const Queries = ["sort", "order", "page", "limit", "only"]; // valid queries
+const getArticleData = (req, res, next) => {
+  const { article_id, dataType } = req.params;
 
-  for (const key in req.query) {
-    if (!Queries.includes(key)) {
-      // if not a valid query paramater
-      return Promise.reject({ status: 400, msg: "Invalid Query" });
-    }
-  }
-  const { sort, order, page, limit, only } = req.query;
+  const dataTypes = [
+    "article_id", "title", "body", "author", "voted_by", "comments", "img_url", "created_at",
+    "comments_count", "votes_count"
+  ]
 
-  return queryArticlesByTopic(topic, sort, order, page, limit, only)
-    .then((articles) => {
-      return res.status(200).send({ articles: articles })
-    })
-    .catch((err) => { next(err) })
-}
+  const countTypes = [
+    "comments_count", "votes_count"
+  ]
 
+  if (dataType==="endpoints") return res.status(200).send({ endpoints: dataTypes })
 
-//////////////////
-const getArticlesByUser = (req, res, next) => {
-  const { username } = req.params
-  const Queries = ["sort", "order", "page", "limit", "only"]; // valid queries
+  if (!dataTypes.includes(dataType)) return res.status(400).send({ err_msg: "400: Invalid dataType" })
 
-  for (const key in req.query) {
-    if (!Queries.includes(key)) {
-      // if not a valid query paramater
-      return Promise.reject({ status: 400, msg: "Invalid Query" });
-    }
-  }
-  const { sort, order, page, limit, only } = req.query;
-
-  return queryArticlesByUser(username, sort, order, page, limit, only)
-    .then((articles) => {
-      if (!articles) {
-        return res.status(404).send({ articles: articles, msg: "404: Not Found" });
-      }
-      return res.status(200).send({ articles: articles })
-    })
-    .catch((err) => { next(err) })
-}
-
-
-//////////////////
-const getArticleInfo = (req, res, next) => {
-  const { article_id, infoType } = req.params;
-
-  if (infoType==="comment_count" || infoType==="vote_count") {
-    return queryArticleInfoCount(article_id, infoType)
-      .then((articleInfoCount) => {
-        if (!articleInfoCount) {
-          return res.status(404).send({ count: articleInfoCount, msg: "404: Not Found" });
+  if (countTypes.includes(dataType)) {
+    return queryArticleDataCount(article_id, dataType)
+      .then((articleDataCount) => {
+        if (!articleDataCount) {
+          return res.status(404).send({ count: articleDataCount, err_msg: "404: Not Found" });
         }
-        return res.status(200).send( { count: (articleInfoCount.cardinality) })
+        return res.status(200).send( { count: (articleDataCount.cardinality) })
       })
       .catch((err) => { next(err) })
   }
 
-  return queryArticleInfo(article_id, infoType)
-    .then((articleInfo) => {
-      if (!articleInfo) {
-        return res.status(404).send({ info: articleInfo, msg: "404: Not Found" });
+  return queryArticleData(article_id, dataType)
+    .then((articleData) => {
+      if (!articleData) {
+        return res.status(404).send({ data: articleData, err_msg: "404: Not Found" });
       }
-      return res.status(200).send( { info: articleInfo[infoType] })
+      return res.status(200).send( { data: articleData[dataType] })
     })
     .catch((err) => { next(err) })
 }
 
 
-//////////////////
-const getCommentsByArticle = (req, res, next) => {
-  const { article_id } = req.params;
-
-  return queryCommentsByArticle(article_id)
-    .then((comments) => {
-      if (!comments || comments.length === 0) {
-        return res.status(404).send({ msg: "404: Not Found" });
-      }
-      res.status(200).send({ comments: comments });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
-
-
 // POST
 const postArticle = (req, res, next) => {
-  const { article } = req.body
+  const article = {...req.body}
+
+  if (typeof article !== "object") return res.status(400).send({ err_msg: "Input must be an object!"})
+  if (Array.isArray(article)) return res.status(400).send({ err_msg: "Input must be an object!"})
+
+  if (!article.hasOwnProperty("title") || !article.title) return res.status(400).send({ err_msg: "No title provided!" })
+  if (!article.hasOwnProperty("author") || !article.author) return res.status(400).send({ err_msg: "No author provided!" })
+  if (!article.hasOwnProperty("body") || !article.body) return res.status(400).send({ err_msg: "No body provided!" })
+  if (!article.hasOwnProperty("comments" || !article.comments)) article.comments = []
+  if (!article.hasOwnProperty("voted_by" || !article.voted_by)) article.voted_by = []
+  if (!article.hasOwnProperty("img_url")) article.img_url = ""
+  if (!article.hasOwnProperty("created_at") || !article.created_at) article.created_at = new Date.now().toISOString()
 
   return insertIntoArticles(article)
     .then((article) => {
-      res.status(200).send({ article: article })
+      if (!article) {
+        return res.status(404).send({ err_msg: "404: Not Found" });
+      }
+      return res.status(201).send({ article: article })
     })
     .catch((err) => { next(err) })
 }
@@ -157,52 +126,38 @@ const postArticle = (req, res, next) => {
 // PATCH
 const patchArticle = (req, res, next) => {
   const { article_id } = req.params;
+  const article = {...req.body}
 
-  if (!req.body.hasOwnProperty("inc_votes")) {
-    return res.status(400).send({ msg: "400: Bad Request" });
-  }
-  if (!typeof req.body.inc_votes === "number") {
-    return res.status(400).send({ msg: "400: Bad Request" });
-  }
+  if (!article.hasOwnProperty("title") || !article.title) return res.status(400).send({ err_msg: "No title provided!" })
+  if (!article.hasOwnProperty("author") || !article.author) return res.status(400).send({ err_msg: "No author provided!" })
+  if (!article.hasOwnProperty("body") || !article.body) return res.status(400).send({ err_msg: "No body provided!" })
 
-  const { inc_votes } = req.body;
-  return updateArticleVotes(article_id, inc_votes)
+  return updateArticle(article_id, article)
     .then((article) => {
-      if (!article) {
-        res.status(404).send({ msg: "404: Not Found" });
-      }
-      res.status(200).send({ article: article });
+      return res.status(200).send({ article: article, msg: `Successfully patched article ${article_id}: ${article.title}`})
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => { next(err) })
 };
 
 
-const patchArticleInfo = (req, res, next) => {
-  const { article_id, infoType } = req.params;
-  const { votes, comments} = req.body
+const patchArticleData = (req, res, next) => {
+  const { article_id, dataType } = req.params;
+  const data = req.body.data
 
-  switch (infoType) {
-    case "votes":
-      if (votes) {
-        return updateArticleVotes(article_id, votes)
-          .then(() => {
-            res.status(200).send({ msg: "Successfully updated article"})
-          })
-          .catch((err) => { next(err) })
-      } break;
-    case "comments":
-      if (comments) {
-        return updateArticleComments(article_id, comments)
-          .then(() => {
-            res.status(200).send({ msg: "Successfully updated article"})
-          })
-          .catch((err) => { next(err) })
-      } break;
-    default:
-      return res.status(400).send({ msg: "Bad Request"})
-  }
+  const dataTypes = [
+    "title", "body", "author", "voted_by", "img_url", "created_at",
+  ] 
+
+  if (!dataTypes.includes(dataType)) return res.status(400).send({ err_msg: "Invalid dataType" })
+
+  if (dataType==="voted_by" && !Array.isArray(data)) return res.status(400).send({ err_msg: "sent data for voted_by must be of type array" })
+  if (dataType==="comments" && !Array.isArray(data)) return res.status(400).send({ err_msg: "sent data for comments must be of type array" })
+
+  return updateArticleData(article_id, dataType, data)
+    .then((article) => {
+      return res.status(200).send({ article: article, msg: `Successfully patched article ${article_id} ${dataType}`})
+    })
+    .catch((err) => { next(err) })
 }
 
 
@@ -211,8 +166,8 @@ const deleteArticle = (req, res, next) => {
   const { article_id } = req.params;
   
   return deleteFromArticles(article_id)
-    .then((articles) => {
-      return res.status(204).send({ articles: articles, msg: "204: No Content" });
+    .then((deletedArticle) => {
+      return res.status(204).send({ article: deletedArticle, msg: `Successfully deleted article ${deletedArticle.title}` });
     })
     .catch((err) => {
       next(err);
@@ -220,8 +175,9 @@ const deleteArticle = (req, res, next) => {
 };
 
 module.exports = {
-  getArticles, getArticleById, getCommentsByArticle, getArticleInfo, getArticlesByTopic, getArticlesByUser,
+  getArticles, getArticlesData,
+  getArticleById, getArticleData,
   postArticle,
-  patchArticle, patchArticleInfo,
+  patchArticle, patchArticleData,
   deleteArticle,
 };

@@ -53,10 +53,10 @@ describe("GET /api/users", () => {
 describe("GET /api/users/:username", () => {
   test("200: returns the article object", () => {
     return request(app)
-      .get("/api/users/butterbridge")
+      .get("/api/users/butter_bridge")
       .expect(200)
       .then((response) => {
-        console.log(response.body.user)
+        //console.log(response.body.user)
       });
   })
 })
@@ -65,42 +65,62 @@ describe("GET /api/users/:username", () => {
 describe("GET /api/users/:username/:infoType", () => {
   test("200: returns an array with the article object", () => {
     return request(app)
-      .get("/api/users/butterbridge/articles")
+      .get("/api/users/butter_bridge/articles")
       .expect(200)
       .then((response) => {
-        expect(response.body.info.length).toBe(1)
+        expect(response.body.data).toEqual(["butter_bridge's article"])
       });
   })
   test("200: returns the description", () => {
     return request(app)
-      .get("/api/users/butterbridge/description")
+      .get("/api/users/butter_bridge/description")
       .expect(200)
       .then((response) => {
-        expect(response.body.info).toBe("Here's Jonny")
+        expect(response.body.data).toBe("Here's Jonny")
       });
   })
   test("200: returns comment count", () => {
     return request(app)
-      .get("/api/users/butterbridge/comment_count")
+      .get("/api/users/butter_bridge/comments_count")
       .expect(200)
       .then((response) => {
-        expect(response.body.count).toBe(1)
+        expect(response.body.count).toEqual(1)
       })
   })
   test("200: returns followers", () => {
     return request(app)
-      .get("/api/users/butterbridge/followers")
+      .get("/api/users/butter_bridge/followers")
       .expect(200)
       .then((response) => {
-        expect(response.body.count).toBe(0)
+        expect(response.body.data).toEqual([])
       })
   })
   test("200: returns following", () => {
     return request(app)
-      .get("/api/users/butterbridge/following")
+      .get("/api/users/butter_bridge/following")
       .expect(200)
       .then((response) => {
-        expect(response.body.count).toBe(0)
+        expect(response.body.data).toEqual([])
+      })
+  })
+  test("200: returns available userdata endpoints", () => {
+    return request(app)
+      .get("/api/users/1/endpoints")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.endpoints).toEqual(
+          [
+            "username", "name", "email", "description",
+            "profile_colour", "avatar_img_url", "banner_img_url",
+            "articles", "comments", "subscribed_topics",
+            "followers", "following",
+            "voted_articles", "voted_comments",
+            "created_at",
+            "articles_count", "comments_count", "subscribed_topics_count", 
+            "followers_count", "following_count",
+            "voted_articles_count", "voted_comments_count"
+        ]
+        )
       })
   })
 
@@ -112,7 +132,7 @@ describe("bad requests",() => {
       .get("/api/articles/banana/comments")
       .expect(400)
       .then((response) => {
-        expect(response.body.msg).toBe("400: Bad Request");
+        expect(response.body.err_msg).toBe("400: Bad Request");
       });
   });
   test("404: Not Found when given a number that exceeds the number of articles", () => {
@@ -120,7 +140,7 @@ describe("bad requests",() => {
       .get("/api/articles/4454634/comments")
       .expect(404)
       .then((response) => {
-        expect(response.body.msg).toBe("404: Not Found");
+        expect(response.body.err_msg).toBe("404: Not Found");
       });
   });
   test("404: Not Found when passed an infoType that doesn't exist", () => {
@@ -128,7 +148,7 @@ describe("bad requests",() => {
       .get("/api/articles/1/banana")
       .expect(400)
       .then((response) => {
-        expect(response.body.msg).toBe("400: Invalid infoType");
+        expect(response.body.err_msg).toBe("400: Invalid dataType");
       });
   });
 });

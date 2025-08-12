@@ -1,7 +1,8 @@
 const {
-  getArticles, getArticleById, getArticleInfo, getArticlesByTopic, getArticlesByUser,
+  getArticles, getArticlesData,
+  getArticleById, getArticleData, getArticlesByTopic, getArticlesByUser,
   postArticle,
-  patchArticle, patchArticleInfo,
+  patchArticle, patchArticleData,
   deleteArticle,
 } = require("../controllers/articles.controller");
 
@@ -16,6 +17,9 @@ articlesRouter.route("/")
   .patch((req, res) => { res.status(200).send("This endpoint does nothing!") })
   .delete((req, res) => { res.status(200).send("This endpoint does nothing!") })
 
+articlesRouter.route("/data/:dataType")
+  .get(getArticlesData)
+
 // /articles/:article_id
 articlesRouter.route("/:article_id")
   .get(getArticleById)
@@ -23,10 +27,10 @@ articlesRouter.route("/:article_id")
   .patch(patchArticle)
   .delete(deleteArticle);
 
-articlesRouter.route("/:article_id/:infoType")
-  .get(getArticleInfo)
+articlesRouter.route("/:article_id/:dataType")
+  .get(getArticleData)
   .post((req, res) => { res.status(200).send( { msg, patch_msg }) })
-  .patch(patchArticleInfo)
+  .patch(patchArticleData)
   .delete((req, res) => { res.status(200).send( { msg, patch_msg }) })
 
 module.exports = articlesRouter;

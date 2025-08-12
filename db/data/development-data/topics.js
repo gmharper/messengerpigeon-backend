@@ -1,7 +1,7 @@
 module.exports = [
   { 
     slug: "coding",
-    author: '', 
+    created_by: '', 
     description: "Code is love, code is life",
     subscribed_users: [], 
     img_url: "",
@@ -9,7 +9,7 @@ module.exports = [
   },
   {
     slug: "football",
-    author: '',
+    created_by: '', 
     description: "FOOTIE!",
     subscribed_users: [],
     img_url:
@@ -18,7 +18,7 @@ module.exports = [
   },
   {
     slug: "cooking",
-    author: '',
+    created_by: '', 
     description: "Hey good looking, what you got cooking?",
     subscribed_users: [],
     img_url:

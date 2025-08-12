@@ -1,7 +1,8 @@
 const { 
-  getUsers, getUser, getUserInfo,
+  getUsers, getUsersData,
+  getUserByUsername, getUserData,
   postUser,
-  patchUser, patchUserInfo,
+  patchUser, patchUserData,
   deleteUser 
 } = require("../controllers/users.controller");
 
@@ -15,16 +16,19 @@ usersRouter.route("/")
   .patch((req, res) => { res.status(200).send("This endpoint does nothing!") })
   .delete((req, res) => { res.status(200).send("This endpoint does nothing!") })
 
+usersRouter.route("/data/:dataType")
+  .get(getUsersData)
+
 usersRouter.route("/:username")
-  .get(getUser)
+  .get(getUserByUsername)
   .post((req, res) => { res.status(200).send("This endpoint does nothing! POST to the /users endpoint or use PATCH instead") })
   .patch(patchUser)
   .delete(deleteUser)
 
-usersRouter.route("/:username/:infoType")
-  .get(getUserInfo)
+usersRouter.route("/:username/:dataType")
+  .get(getUserData)
   .post((req, res) => { res.status(200).send(patch_msg) })                                         
-  .patch(patchUserInfo)
+  .patch(patchUserData)
   .delete((req, res) => { res.status(200).send(patch_msg) })
 
 module.exports = usersRouter;

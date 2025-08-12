@@ -14,17 +14,18 @@ afterAll(() => {
   return db.end();
 });
 
-////////////////////////////////////////////
-describe("DELETE /api/articles/:article_id", () => {
-  test("204: successfully deletes an article", () => {
-    return request(app)
-        .delete("/api/articles/1")
-        .expect(204)
-  })
-});
+//////////////////////////////
+describe("DELETE /api/users/:username", () => {
+    test("204: successfully deletes a user", () => {
+        return request(app)
+            .delete("/api/users/butter_bridge")
+            .expect(204)
+    })
+})
 
 describe("errors", () => {
-    test("deleting an article that doesn't exist", () => {
+    test("deleting a user that doesn't exist", () => {
         //
     })
 })
+

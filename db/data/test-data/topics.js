@@ -1,7 +1,7 @@
 module.exports = [
   {
     slug: "mitch",
-    creator: "lurker",
+    created_by: 'lurker', 
     description: "The man, the Mitch, the legend",
     subscribers: [],
     img_url: "",
@@ -9,7 +9,7 @@ module.exports = [
   },
   {
     slug: "cats",
-    creator: "lurker",
+    created_by: 'lurker', 
     description: "Not dogs",
     subscribers: [],
     img_url: "",
@@ -17,7 +17,7 @@ module.exports = [
   },
   {
     slug: "paper",
-    creator: "lurker",
+    created_by: 'lurker', 
     description: "what books are made of",
     subscribers: [],
     img_url: "",
@@ -25,7 +25,7 @@ module.exports = [
   },
   {
     slug: "coding",
-    creator: "lurker",
+    created_by: 'lurker', 
     description: "",
     subscribers: ["gmharper", "mhgarper"],
     img_url: "",
