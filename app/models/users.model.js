@@ -3,8 +3,7 @@ const db = require("../../db/connection");
 // GET ALL USERS
 const queryAllUsers = (sort="followers_count", order="DESC", page=1, limit=20, only="") => {
   const Sorts = [
-    "username", "name", "email",
-    "description",
+    "username", "name", "email", "description",
     "profile_colour",
     "created_at",
     "articles_count", "comments_count", "subscribed_topics_count",
@@ -29,33 +28,33 @@ const queryAllUsers = (sort="followers_count", order="DESC", page=1, limit=20, o
   let queryString = "SELECT * FROM users"
   let queryArray = []
 
-  switch (sort) {
-    case "articles_count":
-      queryString += ` ORDER BY cardinality(articles) ${order}`
-      break;
-    case "comments_count":
-      queryString += ` ORDER BY cardinality(comments) ${order}`
-      break;
-    case "subscribed_topics_count":
-      queryString += ` ORDER BY cardinality(subscribed_topics) ${order}`
-      break;
-    case "followers_count":
-      queryString += ` ORDER BY cardinality(followers) ${order}`
-      break;
-    case "following_count":
-      queryString += ` ORDER BY cardinality(following) ${order}`
-      break;
-    case "voted_articles_count":
-      queryString += ` ORDER BY cardinality(voted_articles) ${order}`
-      break;
-    case "voted_comments_count":
-      queryString += ` ORDER BY cardinality(voted_comments) ${order}`
-      break;
-    default:
-      queryString += ` ORDER BY ${sort} ${order}`
-  }
+  // switch (sort) {
+  //   case "articles_count":
+  //     queryString += ` ORDER BY cardinality(articles) ${order}`
+  //     break;
+  //   case "comments_count":
+  //     queryString += ` ORDER BY cardinality(comments) ${order}`
+  //     break;
+  //   case "subscribed_topics_count":
+  //     queryString += ` ORDER BY cardinality(subscribed_topics) ${order}`
+  //     break;
+  //   case "followers_count":
+  //     queryString += ` ORDER BY cardinality(followers) ${order}`
+  //     break;
+  //   case "following_count":
+  //     queryString += ` ORDER BY cardinality(following) ${order}`
+  //     break;
+  //   case "voted_articles_count":
+  //     queryString += ` ORDER BY cardinality(voted_articles) ${order}`
+  //     break;
+  //   case "voted_comments_count":
+  //     queryString += ` ORDER BY cardinality(voted_comments) ${order}`
+  //     break;
+  //   default:
+  //     queryString += ` ORDER BY ${sort} ${order}`
+  // }
 
-  queryString += ` OFFSET ${page*limit} LIMIT ${limit}`
+  // queryString += ` OFFSET ${page*limit} LIMIT ${limit}`
 
   return db
     .query(queryString)
@@ -63,6 +62,7 @@ const queryAllUsers = (sort="followers_count", order="DESC", page=1, limit=20, o
       return result.rows;
     });
 };
+
 
 const queryUsersData = (dataType) => {
   const dataTypes = [
