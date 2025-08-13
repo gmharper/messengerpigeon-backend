@@ -163,7 +163,7 @@ const updateTopicData = (slug, dataType, data) => {
 const deleteFromTopics = (slug, dummy) => {
   if (dummy) {
     return db
-      .query("SELECT * FROM topics WHERE slug = $1 RETURNING *;", [slug])
+      .query("SELECT * FROM topics WHERE slug = $1;", [slug])
       .then((result) => {
         return result.rows[0]
       })

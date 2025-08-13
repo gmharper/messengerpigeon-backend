@@ -190,7 +190,7 @@ const updateArticleData = (article_id, dataType, data) => {
 const deleteFromArticles = (article_id, dummy) => {
   if (dummy) {
     return db
-      .query("SELECT * FROM articles WHERE article_id = $1 RETURNING *;", [article_id])
+      .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
       .then((result) => {
         return result.rows[0]
       })

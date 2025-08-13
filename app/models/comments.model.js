@@ -119,30 +119,6 @@ const queryCommentDataCount = (comment_id, countType) => {
 }
 
 
-// GET ALL COMMENTS FROM ARTICLE
-const queryCommentsByArticle = (article_id, sort='created_at', order='DESC', page=0, limit=20, only='') => {
-  return db
-    .query(
-      "SELECT * FROM comments WHERE article_id = $1 ORDER BY $2 $3 OFFSET $4 LIMIT $5;",
-      [article_id, sort, order, page, limit]
-    )
-    .then((result) => {
-      return result.rows;
-    });
-};
-
-const queryCommentsByUser = (username, sort='created_at', order='DESC', page=0, limit=20, only='') => {
-  return db
-    .query(
-      "SELECT * FROM comments WHERE author = $1 ORDER BY $2 $3 OFFSET $4 LIMIT $5;", 
-      [username, sort, order, page, limit]
-    )
-    .then((result) => {
-      return result.rows
-    })
-}
-
-
 // POST COMMENT
 const insertIntoComments = (comment) => {
   // destructure comment
@@ -196,7 +172,7 @@ const updateCommentData = (comment_id, dataType, data) => {
 const deleteFromComments = (comment_id, dummy) => {
   if (dummy) {
     return db
-      .query("SELECT * FROM comments WHERE comment_id = $1 RETURNING *;", [comment_id])
+      .query("SELECT * FROM comments WHERE comment_id = $1;", [comment_id])
       .then((result) => {
         return result.rows[0]
       })
@@ -212,7 +188,7 @@ const deleteFromComments = (comment_id, dummy) => {
 module.exports = {
   queryAllComments, queryCommentsData,
   queryCommentData, queryCommentDataCount,
-  queryCommentById, queryCommentsByArticle, queryCommentsByUser,
+  queryCommentById,
   insertIntoComments,
   updateComment, updateCommentData,
   deleteFromComments,
