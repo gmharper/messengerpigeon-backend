@@ -196,14 +196,14 @@ const updateCommentData = (comment_id, dataType, data) => {
 const deleteFromComments = (comment_id, dummy) => {
   if (dummy) {
     return db
-      .query("SELECT FROM comments WHERE comment_id = $1 RETURNING *", [comment_id])
+      .query("SELECT * FROM comments WHERE comment_id = $1 RETURNING *;", [comment_id])
       .then((result) => {
         return result.rows[0]
       })
   }
 
   return db
-    .query("DELETE FROM comments WHERE comment_id = $1 RETURNING *", [comment_id,])
+    .query("DELETE FROM comments WHERE comment_id = $1 RETURNING *;", [comment_id,])
     .then((result) => {
       return result.rows[0]})
 };
