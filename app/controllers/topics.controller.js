@@ -155,7 +155,17 @@ const patchTopicData = (req, res, next) => {
 const deleteTopic = (req, res, next) => {
   const { slug } = req.params
 
-  return deleteFromTopics(slug)
+  const Queries = ["dummy"]
+
+  for (const key in req.query) {
+    if (!Queries.includes(key)) {
+      // if not a valid query paramater
+      return Promise.reject({ status: 400, err_msg: "Invalid Query" });
+    }
+  }
+  const { dummy } = req.query
+
+  return deleteFromTopics(slug, dummy)
     .then((deletedTopic) => {
       res.status(204).send( { topic: deletedTopic, msg: `Successfully deleted topic ${slug}`})
     })

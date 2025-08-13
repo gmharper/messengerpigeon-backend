@@ -156,7 +156,18 @@ const patchCommentData = (req, res, next) => {
 ///////////////////////
 const deleteComment = (req, res, next) => {
   const { comment_id } = req.params;
-  return deleteFromComments(comment_id)
+
+  const Queries = ["dummy"]
+
+  for (const key in req.query) {
+    if (!Queries.includes(key)) {
+      // if not a valid query paramater
+      return Promise.reject({ status: 400, err_msg: "Invalid Query" });
+    }
+  }
+  const { dummy } = req.query
+
+  return deleteFromComments(comment_id, dummy)
     .then((deletedComment) => {
       return res.status(204).send({ comment: deletedComment, msg: `successfully deleted comment ${comment_id}` });
     })

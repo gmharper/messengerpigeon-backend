@@ -164,7 +164,16 @@ const patchArticleData = (req, res, next) => {
 // DELETE
 const deleteArticle = (req, res, next) => {
   const { article_id } = req.params;
-  const { dummy } = req.params
+
+  const Queries = ["dummy"]
+
+  for (const key in req.query) {
+    if (!Queries.includes(key)) {
+      // if not a valid query paramater
+      return Promise.reject({ status: 400, err_msg: "Invalid Query" });
+    }
+  }
+  const { dummy } = req.query
   
   return deleteFromArticles(article_id, dummy)
     .then((deletedArticle) => {
