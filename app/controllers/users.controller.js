@@ -184,7 +184,7 @@ const patchUserData = (req, res, next) => {
 
 
 // DELETE
-const deleteUser = () => {
+const deleteUser = (req, res, next) => {
   const { username } = req.params
 
   const Queries = ["dummy"]
