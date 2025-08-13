@@ -18,10 +18,10 @@ const queryAllTopics = (created_by="", sort='subscribers_count', order='DESC', p
   if (order && !Orders.includes(order)) {
     return Promise.reject({ status: 400, msg: "Invalid Order" });
   }
-  if (typeof Number(page) !== "number") {
+  if (typeof Number(page) != "number") {
     return Promise.reject({ status: 400, msg: "Invalid Page" });
   }
-  if (typeof Number(limit) !== "number") {
+  if (typeof Number(limit) != "number") {
     return Promise.reject({ status: 400, msg: "Invalid Page Limit" });
   }
 
@@ -160,9 +160,20 @@ const updateTopicData = (slug, dataType, data) => {
 
 
 // DELETE TOPIC
-const deleteFromTopics = (slug) => {
+const deleteFromTopics = (slug, dummy) => {
+  if (dummy) {
+    return db
+      .query("SELECT FROM topics WHERE slug = $1 RETURNING *", [slug])
+      .then((result) => {
+        return result.rows[0]
+      })
+    }
+
   return db
-    .query("DELETE FROM topics WHERE slug = $1;", [slug]);
+    .query("DELETE FROM topics WHERE slug = $1;", [slug])
+    .then((result) => {
+      return result.rows[0]
+    })
 };
 
 

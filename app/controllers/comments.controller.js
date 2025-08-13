@@ -20,7 +20,7 @@ const getComments = (req, res, next) => {
 
   return queryAllComments(username, article_id, sort, order, p, limit, only)
     .then((comments) => {
-      return res.status(200).send({ comments: comments });
+      return res.status(200).send({ comments: comments, msg: "Successfully retrieved comments" });
     })
     .catch((err) => { next(err) })
 };

@@ -1,7 +1,7 @@
 const db = require("../../db/connection");
 
 // GET ALL COMMENTS
-const queryAllComments = (username="", article_id="", sort="", order='DESC', page=0, limit=20, only ) => {
+const queryAllComments = (username="", article_id="", sort="", order='DESC', page=0, limit=20, only='' ) => {
   const Sorts = [
     "article_id",
     "author",
@@ -17,10 +17,10 @@ const queryAllComments = (username="", article_id="", sort="", order='DESC', pag
   if (order && !Orders.includes(order)) {
     return Promise.reject({ status: 400, msg: "Invalid Order" });
   }
-  if (typeof Number(page) !== "number") {
+  if (typeof Number(page) != "number") {
     return Promise.reject({ status: 400, msg: "Invalid Page" });
   }
-  if (typeof Number(limit) !== "number") {
+  if (typeof Number(limit) != "number") {
     return Promise.reject({ status: 400, msg: "Invalid Page Limit" });
   }
 
@@ -193,12 +193,19 @@ const updateCommentData = (comment_id, dataType, data) => {
 
 // DELETE COMMENT
 // need to delete from comments, article AND user
-const deleteFromComments = (comment_id) => {
+const deleteFromComments = (comment_id, dummy) => {
+  if (dummy) {
+    return db
+      .query("SELECT FROM comments WHERE comment_id = $1 RETURNING *", [comment_id])
+      .then((result) => {
+        return result.rows[0]
+      })
+  }
+
   return db
-  .query(
-    "DELETE FROM comments WHERE comment_id = $1 RETURNING *", [comment_id,])
-  .then((result) => {
-    return result.rows[0]})
+    .query("DELETE FROM comments WHERE comment_id = $1 RETURNING *", [comment_id,])
+    .then((result) => {
+      return result.rows[0]})
 };
 
 

@@ -251,12 +251,20 @@ const updateUserData = (username, dataType, data) => {
 
 
 // DELETE USER
-const deleteFromUsers = (username) => {
+const deleteFromUsers = (username, dummy) => {
+  if (dummy) {
+    return db
+      .query("SELECT FROM users WHERE username = $1 RETURNING *", [username])
+      .then((result) => {
+        return result.rows[0]
+      })
+  }
+
   return db
-  .query("DELETE FROM users WHERE username = $1 RETURNING *;", [username])
-  .then((result) => {
-    return result.rows[0]
-  })
+    .query("DELETE FROM users WHERE username = $1 RETURNING *;", [username])
+    .then((result) => {
+      return result.rows[0]
+    })
 };
 
 

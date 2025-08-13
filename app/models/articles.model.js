@@ -18,10 +18,10 @@ const queryAllArticles = (topic="", author="", sort="created_at", order="DESC", 
   if (order && !Orders.includes(order)) {
     return Promise.reject({ status: 400, msg: "Invalid Order" });
   }
-  if (typeof Number(page) !== "number") {
+  if (typeof Number(page) != "number") {
     return Promise.reject({ status: 400, msg: "Invalid Page" });
   }
-  if (typeof Number(limit) !== "number") {
+  if (typeof Number(limit) != "number") {
     return Promise.reject({ status: 400, msg: "Invalid Page Limit" });
   }
 
@@ -187,13 +187,20 @@ const updateArticleData = (article_id, dataType, data) => {
 
 
 // DELETE ARTICLE
-const deleteFromArticles = (article_id) => {
-  return db.query("DELETE FROM articles WHERE article_id = $1 RETURNING *", [
-    article_id,
-  ])
-  .then((result) => {
-    return result.rows[0]
-  })
+const deleteFromArticles = (article_id, dummy) => {
+  if (dummy) {
+    return db
+      .query("SELECT FROM articles WHERE article_id = $1 RETURNING *", [article_id])
+      .then((result) => {
+        return result.rows[0]
+      })
+  }
+
+  return db
+    .query("DELETE FROM articles WHERE article_id = $1 RETURNING *", [article_id,])
+    .then((result) => {
+      return result.rows[0]
+    })
 };
 
 

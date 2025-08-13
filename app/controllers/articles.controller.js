@@ -164,8 +164,9 @@ const patchArticleData = (req, res, next) => {
 // DELETE
 const deleteArticle = (req, res, next) => {
   const { article_id } = req.params;
+  const { dummy } = req.params
   
-  return deleteFromArticles(article_id)
+  return deleteFromArticles(article_id, dummy)
     .then((deletedArticle) => {
       return res.status(204).send({ article: deletedArticle, msg: `Successfully deleted article ${deletedArticle.title}` });
     })
