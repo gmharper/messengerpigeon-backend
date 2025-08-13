@@ -167,7 +167,7 @@ const deleteTopic = (req, res, next) => {
 
   return deleteFromTopics(slug, dummy)
     .then((deletedTopic) => {
-      res.status(204).send( { topic: deletedTopic, msg: `Successfully deleted topic ${slug}`})
+      return res.status(200).send( { topic: deletedTopic, msg: `Successfully deleted topic ${slug}`})
     })
     .catch((err) => { next(err) })
 }

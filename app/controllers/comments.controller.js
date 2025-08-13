@@ -169,7 +169,7 @@ const deleteComment = (req, res, next) => {
 
   return deleteFromComments(comment_id, dummy)
     .then((deletedComment) => {
-      return res.status(204).send({ comment: deletedComment, msg: `successfully deleted comment ${comment_id}` });
+      return res.status(200).send({ comment: deletedComment, msg: `successfully deleted comment ${comment_id}` });
     })
     .catch((err) => { next(err) });
 };

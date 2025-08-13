@@ -199,7 +199,7 @@ const deleteUser = (req, res, next) => {
 
   return deleteFromUsers(username, dummy)
     .then((deletedUser) => {
-      return res.status(204).send( { user: deletedUser, msg: `Successfully deleted user ${username}`})
+      return res.status(200).send( { user: deletedUser, msg: `Successfully deleted user ${username}`})
     })
     .catch((err) => { next(err) })
 }

@@ -25,7 +25,7 @@ const getArticles = (req, res, next) => {
       if (!articles) {
         return res.status(404).send({ err_msg: "404: Not Found" });
       } else {
-        res.status(200).send({ articles: articles });
+        return res.status(200).send({ articles: articles });
       }
     })
     .catch((err) => { next(err) });
@@ -177,11 +177,9 @@ const deleteArticle = (req, res, next) => {
   
   return deleteFromArticles(article_id, dummy)
     .then((deletedArticle) => {
-      return res.status(204).send({ article: deletedArticle, msg: `Successfully deleted article ${deletedArticle.title}` });
+      return res.status(200).send({ article: deletedArticle, msg: `Successfully deleted article ${deletedArticle.title}` });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => { next(err) });
 };
 
 module.exports = {
