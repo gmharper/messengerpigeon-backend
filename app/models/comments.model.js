@@ -3,6 +3,7 @@ const db = require("../../db/connection");
 // GET ALL COMMENTS
 const queryAllComments = (username="", article_id="", sort="", order='DESC', page=0, limit=20, only='' ) => {
   const Sorts = [
+    "comment_id",
     "article_id",
     "author",
     "body",

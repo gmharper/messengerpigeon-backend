@@ -20,7 +20,9 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
         type VARCHAR(10) DEFAULT 'user', 
         name VARCHAR(50),
         email VARCHAR(100),
+        password VARCHAR(50),
         description VARCHAR(200),
+        theme VARCHAR(6) DEFAULT 'dark',
         profile_colour VARCHAR(200), 
         avatar_img_url VARCHAR(200),
         banner_img_url VARCHAR(200),
@@ -29,6 +31,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
         articles VARCHAR[] DEFAULT '{}' NOT NULL,
         comments VARCHAR[] DEFAULT '{}' NOT NULL,
         subscribed_topics VARCHAR[] DEFAULT '{}' NOT NULL,
+        subscribed_games VARCHAR[] DEFAULT '{}' NOT NULL,
         followers VARCHAR[] DEFAULT '{}' NOT NULL,
         following VARCHAR[] DEFAULT '{}' NOT NULL,
         voted_articles VARCHAR[] DEFAULT '{}' NOT NULL,
@@ -42,6 +45,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
         created_by VARCHAR(50) REFERENCES users(username), 
         description VARCHAR(200), 
         subscribers VARCHAR[] DEFAULT '{}' NOT NULL,
+        topic_colour: string,
         img_url VARCHAR(200),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
@@ -76,11 +80,12 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       const formattedUserData = userData.map((userDatas) => {
         return [
           userDatas.username, userDatas.name, userDatas.email,
-          userDatas.description, 
+          userDatas.description, userDatas.password, userDatas.theme,
           userDatas.profile_colour, userDatas.avatar_img_url, userDatas.banner_img_url,
           `{ ${userDatas.articles.map(item => item)} }`,
           `{ ${userDatas.comments.map(item => item)} }`,
           `{ ${userDatas.subscribed_topics.map(item => item)} }`,
+          `{ ${userDatas.subscribed_games.map(item => item)} }`,
           `{ ${userDatas.followers.map(item => item)} }`,
           `{ ${userDatas.following.map(item => item)} }`,
           `{ ${userDatas.voted_articles.map(item => item)} }`,
@@ -88,9 +93,9 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
           new Date(userDatas.created_at)];
       });
       const users = format(
-        "INSERT INTO users(username, name, email, description, "+
+        "INSERT INTO users(username, name, email, description, password, theme, "+
         "profile_colour, avatar_img_url, banner_img_url, "+
-        "articles, comments, subscribed_topics, followers, following, "+
+        "articles, comments, subscribed_topics, subscribed_games, followers, following, "+
         "voted_articles, voted_comments, created_at) VALUES %L;",
         formattedUserData
       );
@@ -102,11 +107,12 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
           topicDatas.slug, 
           topicDatas.created_by, topicDatas.description, 
           `{ ${topicDatas.subscribers.map(item => item)} }`,
+          topicDatas.topic_colour,
           topicDatas.img_url, 
           new Date(topicDatas.created_at)];
       });
       const topics = format(
-        "INSERT INTO topics(slug, created_by, description, subscribers, img_url, created_at) VALUES %L;",
+        "INSERT INTO topics(slug, created_by, description, subscribers, topic_colour, img_url, created_at) VALUES %L;",
         formattedTopicData
       );
       return db.query(topics);

@@ -7,8 +7,8 @@ const queryAllArticles = (topic="", author="", sort="created_at", order="DESC", 
     "title",
     "topic",
     "author",
-    "created_at",
     "votes_count",
+    "created_at",
   ];
   const Orders = ["ASC", "DESC"];
 

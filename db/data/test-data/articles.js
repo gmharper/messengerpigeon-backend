@@ -4,7 +4,7 @@ module.exports = [
     topic: "mitch",
     author: "butter_bridge",
     body: "I find this existence challenging",
-    comments: ["a", "b", "c", "d"],
+    comments: [1, 2, 3],
     voted_by: ["a", "b", "c"],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -15,7 +15,7 @@ module.exports = [
     topic: "mitch",
     author: "icellusedkars",
     body: "Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.",
-    comments: [],
+    comments: [1, 2, 3],
     voted_by: [],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -26,7 +26,7 @@ module.exports = [
     topic: "mitch",
     author: "icellusedkars",
     body: "some gifs",
-    comments: ["woohoo!", "yes", "mitch"],
+    comments: [1, 2, 3],
     voted_by: ["arandomduck", "someguy"],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -37,7 +37,7 @@ module.exports = [
     topic: "mitch",
     author: "rogersop",
     body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
-    comments: [],
+    comments: [3, 4, 5],
     voted_by: [],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -48,7 +48,7 @@ module.exports = [
     topic: "cats",
     author: "rogersop",
     body: "Bastet walks amongst us, and the cats are taking arms!",
-    comments: [],
+    comments: [5],
     voted_by: [],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -59,7 +59,7 @@ module.exports = [
     topic: "mitch",
     author: "icellusedkars",
     body: "Delicious tin of cat food",
-    comments: [],
+    comments: [7, 8],
     voted_by: [],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -70,7 +70,7 @@ module.exports = [
     topic: "mitch",
     author: "icellusedkars",
     body: "I was hungry.",
-    comments: [],
+    comments: [8, 9],
     voted_by: [],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -81,7 +81,7 @@ module.exports = [
     topic: "mitch",
     author: "icellusedkars",
     body: "Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!",
-    comments: [],
+    comments: [9],
     voted_by: [],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -93,7 +93,7 @@ module.exports = [
     author: "butter_bridge",
     body: "Well? Think about it.",
     comments: [],
-    voted_by: ["x", "y", "z"],
+    voted_by: [],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
     created_at: 1591438200000  
@@ -137,7 +137,7 @@ module.exports = [
     author: "butter_bridge",
     body: "There will never be enough articles about Mitch!",
     comments: [],
-    voted_by: ["a", "b", "c", "d"],
+    voted_by: [],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
     created_at: 1602419040000
