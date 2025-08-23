@@ -25,9 +25,18 @@ const getComments = (req, res, next) => {
     .catch((err) => { next(err) })
 };
 
+
 //////////////////
 const getCommentsData = (req, res, next) => {
   const { dataType } = req.params
+
+  const dataTypes = [
+    "comment_id", "article_id", "article_title", "author", "body", "voted_by", "created_at",
+    "votes_count"
+  ]
+
+  if (!dataTypes.includes(dataType)) return res.status(400).send({ err_msg: "Invalid dataType" })
+  if (dataType==="endpoints") return res.status(200).send({ endpoints: dataTypes })
 
   return queryCommentsData(dataType)
     .then((data) => {
@@ -98,7 +107,7 @@ const postComment = (req, res, next) => {
   if (!comment.hasOwnProperty("article_title") || !comment.article_title) return res.status(400).send({ err_msg: "No article title provided!" })
   if (!comment.hasOwnProperty("author") || !comment.author) return res.status(400).send({ err_msg: "No author provided!" })
   if (!comment.hasOwnProperty("body") || !comment.body) return res.status(400).send({ err_msg: "No body provided!" })
-  if (!comment.hasOwnProperty("voted_by" || !comment.voted_by)) comment.voted_by = []
+  if (!comment.hasOwnProperty("voted_by")) comment.voted_by = []
   if (!comment.hasOwnProperty("created_at") || !comment.created_at) comment.created_at = new Date.now().toISOString()
 
   return insertIntoComments(comment)

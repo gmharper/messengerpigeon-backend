@@ -5,10 +5,14 @@ const format = require("pg-format");
 const queryAllTopics = (created_by="", sort='subscribers_count', order='DESC', page=0, limit=20, only) => {
   const Sorts = [
     "slug",
+    "name",
     "description",
+    "topic_colour",
     "created_by",
     "created_at",
-    "subscribers_count"
+    "subscribers_count",
+    "articles_count",
+    "comments_count"
   ];
   const Orders = ["ASC", "DESC"];
 
@@ -29,6 +33,8 @@ const queryAllTopics = (created_by="", sort='subscribers_count', order='DESC', p
   let queryArray = []
 
   if (sort==="subscribers_count") queryString += ` ORDER BY cardinality(subscribers) ${order}`
+  else if (sort==="articles_count") queryString += ` ORDER BY cardinality(articles) ${order}`
+  else if (sort==="comments_count") queryString += ` ORDER BY cardinality(comments) ${order}`
   else queryString += ` ORDER BY ${sort} ${order}`
 
   queryString += ` OFFSET ${page*limit} LIMIT ${limit}`
@@ -47,7 +53,10 @@ const queryAllTopics = (created_by="", sort='subscribers_count', order='DESC', p
 
 const queryTopicsData = (dataType) => {
   const dataTypes = [
-    "slug","created_by","description","subscribers","img_url","created_at"
+    "slug", "name", "description", "topic_colour",
+    "created_by", 
+    "subscribers", "articles", "comments",
+    "img_url", "created_at"
   ]
 
   if (!dataTypes.includes(dataType)) return Promise.reject({ status: 400, msg: "400: Invalid dataType" })
@@ -74,7 +83,10 @@ const queryTopicBySlug = (slug) => {
 /////////////////
 const queryTopicData = (slug, dataType) => {
   const dataTypes = [
-    "slug","created_by","description","subscribers","img_url","created_at"
+    "slug", "name", "description", "topic_colour",
+    "created_by",
+    "subscribers", "articles", "comments",
+    "img_url", "created_at"
   ]
 
   if (!dataTypes.includes(dataType)) return Promise.reject({ status: 400, msg: "400: Invalid dataType" })
@@ -101,6 +113,12 @@ const queryTopicDataCount = (slug, countType) => {
     case "subscribers_count":
       dataType = "subscribers"
       break;
+    case "articles_count":
+      dataType = "articles"
+      break;
+    case "comments_count":
+      dataType = "comments"
+      break;
   }
 
   let queryString = `SELECT cardinality(${dataType}) FROM topics ` +"WHERE slug = $1"
@@ -116,11 +134,11 @@ const queryTopicDataCount = (slug, countType) => {
 // POST TOPIC
 const insertIntoTopics = (topic) => {
 
-const { slug, created_by, description, img_url, created_at } = topic
+const { slug, name, created_by, description, topic_colour, img_url, created_at } = topic
 
   return db
-    .query("INSERT INTO topics (slug, created_by, description, img_url, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
-      [slug, created_by, description, img_url, created_at])
+    .query("INSERT INTO topics (slug, name, created_by, description, topic_colour, img_url, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;",
+      [slug, name, created_by, description, topic_colour, img_url, created_at])
     .then((result) => {
       return result.rows[0];
     });
@@ -128,14 +146,18 @@ const { slug, created_by, description, img_url, created_at } = topic
 
 
 // PATCH TOPIC
-const updateTopic = (slug2, topic) => {
+const updateTopic = (input_slug, topic) => {
   // destructure topic
-  const { slug, description, img_url } = topic
+  const { 
+    slug, name, description, topic_colour,
+    subscribers, articles, comments, 
+    img_url 
+  } = topic
 
   return db
     .query(
-      "UPDATE topics SET slug=$2, description=$3, img_url=$4 WHERE slug = $1 RETURNING *;", 
-      [slug2, slug, description, img_url]
+      "UPDATE topics SET slug=$2, name=$3, description=$4, topic_colour=$5, subscribers=$6, articles=$7, comments=$8, img_url=$9 WHERE slug = $1 RETURNING *;", 
+      [input_slug, slug, name, description, topic_colour, subscribers, articles, comments, img_url]
     ).then((result) => {
       return result.rows[0]
     })
@@ -143,8 +165,9 @@ const updateTopic = (slug2, topic) => {
 
 const updateTopicData = (slug, dataType, data) => {
   const dataTypes = [
-    "slug", "description", "img_url", "created_by",
-    "subscribers"
+    "slug", "name", "description", "topic_colour",
+    "subscribers", "articles", "comments",
+    "img_url", "created_by",
   ]
 
   if (!dataTypes.includes(dataType)) return Promise.reject({ status: 400, err_msg: "Invalid dataType" })

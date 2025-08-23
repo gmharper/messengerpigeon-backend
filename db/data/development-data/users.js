@@ -1,4 +1,28 @@
 module.exports = [
+    {
+    username: 'gmharper',
+    name: 'gmharper',
+    email: "georgemichaelharper@gmail.com",
+    description: '',
+    password: 'gmharper123',
+    verified: true,
+    theme: 'dark',
+    profile_colour: 'purple',
+    avatar_img_url:
+      'https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953',
+    banner_img_url: '',
+    banner_blend: "normal",
+    banner_position: "center",
+    articles: [],
+    comments: [],  
+    subscribed_topics: ['sports', 'football', 'snooker', 'coding', 'cooking', 'tech', 'video_games'],
+    subscribed_games: [],
+    followers: ['grumpy19', 'jessjelly', 'tickle122'],
+    following: ['grumpy19', 'happyamy2016', 'tickle122', 'cooljmessy'],
+    voted_articles: [11, 22, 24, 25, 32],
+    voted_comments: ['8', '9', '11', '29', '31'],
+    created_at: 1581495960000
+  },
   {
     username: 'tickle122',
     name: 'Tom Tickle',
@@ -6,6 +30,7 @@ module.exports = [
     description: '',
     password: 'tickle122',
     theme: 'light',
+    verified: true,
     profile_colour: '',
     avatar_img_url:
       'https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953',
@@ -14,13 +39,13 @@ module.exports = [
     banner_position: "center",
     articles: [],
     comments: [],  
-    subscribed_topics: [],
+    subscribed_topics: ['cooking', 'video_games', 'tech', 'movies', 'music'],
     subscribed_games: [],
-    followers: [],
-    following: [],
-    voted_articles: [],
-    voted_comments: [],
-    created_at: ''
+    followers: ['grumpy19', 'jessjelly', 'gmharper'],
+    following: ['grumpy19', 'happyamy2016', 'gmharper'],
+    voted_articles: [11, 22, 24, 25, 32],
+    voted_comments: ['8', '9', '11', '29', '31'],
+    created_at: 1581495960000
   },
   {
     username: 'grumpy19',
@@ -28,6 +53,7 @@ module.exports = [
     email: "",
     description: '',
     password: 'grumpy19',
+    verified: false,
     theme: 'dark',
     profile_colour: '',
     avatar_img_url:
@@ -37,13 +63,13 @@ module.exports = [
     banner_position: "center",
     articles: [],
     comments: [],
-    subscribed_topics: [],
+    subscribed_topics: ['football', 'snooker', 'rugby', 'cricket', 'manchester_united'],
     subscribed_games: [],
-    followers: [],
-    following: [],
-    voted_articles: [],
-    voted_comments: [],
-    created_at: ''
+    followers: ['tickle122'],
+    following: ['tickle122'],
+    voted_articles: [7, 8, 13, 14, 26],
+    voted_comments: ['2', '4', '5', '8', '15'],
+    created_at: 1581495960000
   },
   {
     username: 'happyamy2016',
@@ -51,6 +77,7 @@ module.exports = [
     email: "",
     description: '',
     password: 'happyamy2016',
+    verified: true,
     theme: 'dark',
     profile_colour: '',
     avatar_img_url:
@@ -60,13 +87,13 @@ module.exports = [
     banner_position: "center",
     articles: [],
     comments: [],
-    subscribed_topics: [],
+    subscribed_topics: ['coding', 'cooking', 'tennis', 'history', 'music'],
     subscribed_games: [],
-    followers: [],
-    following: [],
-    voted_articles: [],
-    voted_comments: [],
-    created_at: ''
+    followers: ['gmharper', 'tickle122'],
+    following: ['tickle122'],
+    voted_articles: [3, 7, 9, 34, 40],
+    voted_comments: ['7', '31', '32'],
+    created_at: 1581495960000
   },
   {
     username: 'cooljmessy',
@@ -75,6 +102,7 @@ module.exports = [
     description: '',
     password: 'cooljmessy',
     theme: 'dark',
+    verified: true,
     profile_colour: '',
     avatar_img_url:
       'https://vignette.wikia.nocookie.net/mrmen/images/1/1a/MR_MESSY_4A.jpg/revision/latest/scale-to-width-down/250?cb=20170730171002',
@@ -83,13 +111,13 @@ module.exports = [
     banner_position: "center",
     articles: [],
     comments: [],
-    subscribed_topics: [],
+    subscribed_topics: ['tennis', 'video_games', 'kereru', 'formula_one', 'music'],
     subscribed_games: [],
-    followers: [],
-    following: [],
-    voted_articles: [],
-    voted_topics: [],
-    created_at: ''
+    followers: ['gmharper'],
+    following: ['jessjelly'],
+    voted_articles: [3, 30],
+    voted_comments: ['9', '27', '30'],
+    created_at: 1581495960000
   },
   {
     username: 'weegembump',
@@ -97,6 +125,7 @@ module.exports = [
     email: "",
     description: '',
     password: 'weegembump',
+    verified: false,
     theme: 'light',
     profile_colour: '',
     avatar_img_url:
@@ -106,13 +135,13 @@ module.exports = [
     banner_position: "center",
     articles: [],
     comments: [],
-    subscribed_topics: [],
+    subscribed_topics: ['formula_one', 'tech', 'coding', 'music'],
     subscribed_games: [],  
     followers: [],
     following: [],
-    voted_articles: [],
-    voted_topics: [],
-    created_at: ''
+    voted_articles: [3, 29],
+    voted_comments: ['10', '11', '28'],
+    created_at: 1581495960000
   },
   {
     username: 'jessjelly',
@@ -120,6 +149,7 @@ module.exports = [
     email: "",
     description: '',
     password: 'jessjelly',
+    verified: false,
     theme: 'light',
     profile_colour: '',
     avatar_img_url:
@@ -129,12 +159,12 @@ module.exports = [
     banner_position: "center",
     articles: [],
     comments: [],
-    subscribed_topics: [],
+    subscribed_topics: ['sports', 'rugby', 'tech', 'history', 'movies', 'music'],
     subscribed_games: [],
-    followers: [],
-    following: [],
-    voted_articles: [],
-    voted_topics: [],
-    created_at: ''
+    followers: ['cooljmessy', 'gmharper'],
+    following: ['tickle122', 'gmharper'],
+    voted_articles: [6, 23],
+    voted_comments: ['40'],
+    created_at: 1581495960000
   }
 ];

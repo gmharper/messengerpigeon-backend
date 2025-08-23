@@ -5,7 +5,7 @@ module.exports = [
     author: "butter_bridge",
     body: "I find this existence challenging",
     comments: [1, 2, 3],
-    voted_by: ["a", "b", "c"],
+    voted_by: [],
     img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
     created_at: 1594329060000

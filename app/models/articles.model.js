@@ -57,7 +57,9 @@ const queryAllArticles = (topic="", author="", sort="created_at", order="DESC", 
 /////////////////////
 const queryArticlesData = (dataType) => {
   const dataTypes = [
-    "article_id","title","topic","author","body","comments","voted_by","img_url","created_at"
+    "article_id", "title", "topic", "author", "body",
+    "comments", "voted_by",
+    "img_url", "link_url", "created_at"
   ]
 
   if (!dataTypes.includes(dataType)) { return Promise.reject({ status: 400, msg: "Invalid dataType" })}
@@ -85,7 +87,10 @@ const queryArticleById = (article_id) => {
 /////////////////
 const queryArticleData = (article_id, dataType) => {
   const dataTypes = [
-    "article_id","title","topic","author","body","comments","voted_by","img_url","created_at"
+    "article_id", "title", "topic", "author", "body", 
+    "comments", "voted_by",
+    "img_url", "link_url",
+    "created_at"
   ]
 
   if (dataType && !dataTypes.includes(dataType)) {
@@ -136,12 +141,12 @@ const queryArticleDataCount = (article_id, countType) => {
 // "INSERT INTO articles(title, topic, author, body, img_url, created_at) VALUES %L RETURNING *"
 const insertIntoArticles = (article) => {
   // Destructure article
-  const { title, topic, author, body, img_url, created_at } = article
+  const { title, topic, author, body, img_url, link_url, created_at } = article
 
   return db
     .query(
-      "INSERT INTO articles (title, topic, author, body, img_url, created_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;", 
-      [title, topic, author, body, img_url, created_at]
+      "INSERT INTO articles (title, topic, author, body, img_url, link_url created_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;", 
+      [title, topic, author, body, img_url, link_url, created_at]
     )
     .then((result) => {
       return result.rows[0]
@@ -153,13 +158,13 @@ const insertIntoArticles = (article) => {
 const updateArticle = (article_id, article) => {
   // Destructure article
   const {
-    title, topic, author, body, img_url
+    title, topic, author, body, img_url, link_url
   } = article
 
   return db
     .query(
-      "UPDATE articles SET title=$2, topic=$3, author=$4, body=$5, img_url=$6 WHERE article_id = $1 RETURNING *;", 
-      [article_id, title, topic, author, body, img_url]
+      "UPDATE articles SET title=$2, topic=$3, author=$4, body=$5, img_url=$6 link_url=$7 WHERE article_id = $1 RETURNING *;", 
+      [article_id, title, topic, author, body, img_url, link_url]
     )
     .then((result) => {
       return result.rows[0]
@@ -169,7 +174,7 @@ const updateArticle = (article_id, article) => {
 ////////////////////////
 const updateArticleData = (article_id, dataType, data) => {
   const dataTypes = [
-    "title", "topic", "author", "body", "img_url",
+    "title", "topic", "author", "body", "img_url", "link_url",
     "voted_by", "comments"
   ]
 

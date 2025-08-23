@@ -32,6 +32,14 @@ const getTopics = (req, res, next) => {
 const getTopicsData = (req, res, next) => {
   const { dataType } = req.params
 
+  const dataTypes = [
+    "slug", "description", "created_by", "subscribers", "comments", "img_url", "created_at",
+    "subscribers_count", "comments_count"
+  ]
+
+  if (!dataTypes.includes(dataType)) return res.status(400).send({ err_msg: "Invalid dataType" })
+  if (dataType==="endpoints") { return res.status(200).send({ endpoints: dataTypes }) }  
+
   return queryTopicsData(dataType)
     .then((data) => {
       return res.status(200).send({ data: data, msg: `Successfully retrieved ${dataType} from topics` })
@@ -57,18 +65,17 @@ const getTopicBySlug = (req, res, next) => {
 const getTopicData = (req, res, next) => {
   const { slug, dataType } = req.params
 
-  const endpoints = [
-    "slug", "description", "created_by", "subscribers", "img_url", "created_at",
-    "subscribers_count"
+  const dataTypes = [
+    "slug", "description", "created_by", "subscribers", "comments", "img_url", "created_at",
+    "subscribers_count", "comments_count"
   ]
 
   const countTypes = [
-    "subscribers_count"
+    "subscribers_count", "comments_count"
   ]
 
-  if (dataType==="endpoints") {
-    return res.status(200).send({ endpoints: endpoints })
-  }
+  if (!dataTypes.includes(dataType)) return res.status(400).send({ err_msg: "Invalid dataType" })
+  if (dataType==="endpoints") { return res.status(200).send({ endpoints: dataTypes }) }
 
   if (dataType && countTypes.includes(dataType)) {
     return queryTopicDataCount(slug, dataType)
@@ -100,11 +107,14 @@ const postTopic = (req, res, next) => {
   if (typeof topic !== "object") return res.status(400).send({ err_msg: "Input must be an object!"})
   if (Array.isArray(topic)) return res.status(400).send({ err_msg: "Input must be an object!"})
 
-  if (!topic.hasOwnProperty("slug") || !topic.slug) return res.status(400).send({ err_msg: "No slug provided!" })  
+  if (!topic.hasOwnProperty("slug") || !topic.slug) return res.status(400).send({ err_msg: "No slug provided!" }) 
+  if (!topic.hasOwnProperty("name") || !topic.name) topic.name = topic.slug  
   if (!topic.hasOwnProperty("created_by") || !topic.created_by) return res.status(400).send({ err_msg: "No creator provided!" })
-  if (!topic.hasOwnProperty("description") || !topic.description) return res.status(400).send({ err_msg: "No description provided!" })
-  if (!topic.hasOwnProperty("subscribers" || !topic.subscribers)) comment.subscribers = []
-  if (!topic.hasOwnProperty("created_at") || !topic.created_at) comment.created_at = new Date.now().toISOString()
+  if (!topic.hasOwnProperty("description")) topic.description = ''
+  if (!topic.hasOwnProperty("topic_colour")) topic.topic_colour = 'white'
+  if (!topic.hasOwnProperty("subscribers")) topic.subscribers = []
+  if (!topic.hasOwnProperty("subscribers")) topic.comments = []  
+  if (!topic.hasOwnProperty("created_at") || !topic.created_at) topic.created_at = new Date.now().toISOString()
 
   return insertIntoTopics(topic)
     .then((topic) => {
@@ -123,6 +133,7 @@ const patchTopic = (req, res, next) => {
   const topic = {...req.body}
 
   if (!topic.hasOwnProperty("slug") || !topic.slug) return res.status(400).send({ err_msg: "No slug provided!" })
+  if (!topic.hasOwnProperty("name") || !topic.name) topic.name = topic.slug
   if (!topic.hasOwnProperty("description") || !topic.description) return res.status(400).send({ err_msg: "No description provided!" })
 
   return updateTopic(slug, topic)
@@ -138,7 +149,7 @@ const patchTopicData = (req, res, next) => {
   const data = req.body.data
 
   const dataTypes = [
-    "slug", "description", "created_by", "subscribers", "img_url", "created_at",
+    "slug", "name", "description", "topic_colour", "created_by", "subscribers", "comments", "img_url", "created_at"
   ]
 
   if (!dataTypes.includes(dataType)) return res.status(400).send({ err_msg: "Invalid dataType" })

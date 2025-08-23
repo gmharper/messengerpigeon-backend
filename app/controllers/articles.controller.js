@@ -35,6 +35,16 @@ const getArticles = (req, res, next) => {
 const getArticlesData = (req, res, next) => {
   const { dataType } = req.params
 
+  const dataTypes = [
+    "article_id", "title", "body", "author", 
+    "voted_by", "comments", 
+    "img_url", "link_url", "created_at",
+    "comments_count", "votes_count"
+  ]
+
+  if (!dataTypes.includes(dataType)) return res.status(400).send({ err_msg: "400: Invalid dataType" })
+  if (dataType==="endpoints") return res.status(200).send({ endpoints: dataTypes })
+
   return queryArticlesData(dataType)
     .then((data) => {
       return res.status(200).send({ data: data, msg: `Successfully retrieved ${dataType} from articles` })
@@ -63,7 +73,9 @@ const getArticleData = (req, res, next) => {
   const { article_id, dataType } = req.params;
 
   const dataTypes = [
-    "article_id", "title", "body", "author", "voted_by", "comments", "img_url", "created_at",
+    "article_id", "title", "body", "author", 
+    "voted_by", "comments", 
+    "img_url", "link_url", "created_at",
     "comments_count", "votes_count"
   ]
 
@@ -72,7 +84,6 @@ const getArticleData = (req, res, next) => {
   ]
 
   if (dataType==="endpoints") return res.status(200).send({ endpoints: dataTypes })
-
   if (!dataTypes.includes(dataType)) return res.status(400).send({ err_msg: "400: Invalid dataType" })
 
   if (countTypes.includes(dataType)) {
@@ -107,9 +118,10 @@ const postArticle = (req, res, next) => {
   if (!article.hasOwnProperty("title") || !article.title) return res.status(400).send({ err_msg: "No title provided!" })
   if (!article.hasOwnProperty("author") || !article.author) return res.status(400).send({ err_msg: "No author provided!" })
   if (!article.hasOwnProperty("body") || !article.body) return res.status(400).send({ err_msg: "No body provided!" })
-  if (!article.hasOwnProperty("comments" || !article.comments)) article.comments = []
-  if (!article.hasOwnProperty("voted_by" || !article.voted_by)) article.voted_by = []
+  if (!article.hasOwnProperty("comments")) article.comments = []
+  if (!article.hasOwnProperty("voted_by")) article.voted_by = []
   if (!article.hasOwnProperty("img_url")) article.img_url = ""
+  if (!article.hasOwnProperty("link_url")) article.img_url = ""  
   if (!article.hasOwnProperty("created_at") || !article.created_at) article.created_at = new Date.now().toISOString()
 
   return insertIntoArticles(article)
@@ -145,7 +157,7 @@ const patchArticleData = (req, res, next) => {
   const data = req.body.data
 
   const dataTypes = [
-    "title", "body", "author", "voted_by", "img_url", "created_at",
+    "title", "body", "author", "voted_by", "comments", "img_url", "link_url", "created_at",
   ] 
 
   if (!dataTypes.includes(dataType)) return res.status(400).send({ err_msg: "Invalid dataType" })

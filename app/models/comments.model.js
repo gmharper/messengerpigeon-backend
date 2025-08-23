@@ -1,10 +1,11 @@
 const db = require("../../db/connection");
 
 // GET ALL COMMENTS
-const queryAllComments = (username="", article_id="", sort="", order='DESC', page=0, limit=20, only='' ) => {
+const queryAllComments = (author="", article_id="", sort="", order='DESC', page=0, limit=20, only='' ) => {
   const Sorts = [
     "comment_id",
     "article_id",
+    "article_title",
     "author",
     "body",
     "created_at",
@@ -34,12 +35,12 @@ const queryAllComments = (username="", article_id="", sort="", order='DESC', pag
   queryString += ` OFFSET ${page*limit} LIMIT ${limit}`
 
   if (username && article_id) {
-    queryString += " WHERE username=$1 AND article_id=$2;"
-    queryArray = [username, article_id]
+    queryString += " WHERE author=$1 AND article_id=$2;"
+    queryArray = [author, article_id]
   }
   else if (username) {
-    queryString += " WHERE username=$1;"
-    queryArray = [username]
+    queryString += " WHERE author=$1;"
+    queryArray = [author]
   }
   else if (article_id) {
     queryString += " WHERE article_id=$1;"

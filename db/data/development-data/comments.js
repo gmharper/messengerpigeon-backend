@@ -1,6 +1,6 @@
 module.exports = [
   {
-    article_id: '',
+    article_id: 1,
     article_title: "The People Tracking Every Touch, Pass And Tackle in the World Cup",
     body: "Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.",
     voted_by: [],
@@ -8,7 +8,7 @@ module.exports = [
     created_at: 1590103140000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Making sense of Redux",
     body: "Nobis consequatur animi. Ullam nobis quaerat voluptates veniam.",
     voted_by: [],
@@ -16,7 +16,7 @@ module.exports = [
     created_at: 1577890920000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "22 Amazing open source React projects",
     body: "Qui sunt sit voluptas repellendus sed. Voluptatem et repellat fugiat. Rerum doloribus eveniet quidem vero aut sint officiis. Dolor facere et et architecto vero qui et perferendis dolorem. Magni quis ratione adipisci error assumenda ut. Id rerum eos facere sit nihil ipsam officia aspernatur odio.",
     voted_by: [],
@@ -24,7 +24,7 @@ module.exports = [
     created_at: 1600820280000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "The People Tracking Every Touch, Pass And Tackle in the World Cup",
     body: "Rerum voluptatem quam odio facilis quis illo unde. Ex blanditiis optio tenetur sunt. Cumque dolor ducimus et qui officia quasi non illum reiciendis.",
     voted_by: [],
@@ -32,7 +32,7 @@ module.exports = [
     created_at: 1602370980000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Which current Premier League manager was the best player?",
     body: "Quod qui quia dignissimos sit tempore vel reprehenderit. Ipsa ipsa veritatis architecto corporis et et non. Sed alias occaecati eum dignissimos sint eius. Ad ea iste quas quia velit libero voluptatem voluptatem. Animi illo nisi nulla quia sapiente omnis dolorem nulla. Sunt dolor similique.",
     voted_by: [],
@@ -40,7 +40,7 @@ module.exports = [
     created_at: 1585948620000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Stone Soup",
     body: "Veritatis animi et voluptates nesciunt officia facere eaque. Eligendi earum explicabo necessitatibus aut dolorem nisi esse nesciunt. Non iusto rem ut consequuntur quam ut rem sed. Velit laboriosam consectetur enim delectus eos sit veritatis eveniet perspiciatis.",
     voted_by: [],
@@ -48,7 +48,7 @@ module.exports = [
     created_at: 1594890960000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Which current Premier League manager was the best player?",
     body: "Facilis corporis animi et non non minus nisi. Magnam et sequi dolorum fugiat ab assumenda.",
     voted_by: [],
@@ -56,7 +56,7 @@ module.exports = [
     created_at: 1586387400000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "HOW COOKING HAS CHANGED US",
     body: "Est debitis iusto sed consectetur. Eum eum rerum qui est nihil maxime quae. Ut autem velit sint iste consequatur culpa voluptatibus. Quo qui nobis cupiditate adipisci nostrum et. Est et qui at sit atque et fuga voluptatibus impedit.",
     voted_by: [],
@@ -64,7 +64,7 @@ module.exports = [
     created_at: 1605986160000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Who are the most followed clubs and players on Instagram?",
     body: "Ea iure voluptas. Esse vero et dignissimos blanditiis commodi rerum dicta omnis modi.",
     voted_by: [],
@@ -72,7 +72,7 @@ module.exports = [
     created_at: 1578114840000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Thanksgiving Drinks for Everyone",
     body: "Incidunt quidem ut. Voluptatem blanditiis ipsa commodi suscipit quae et. Magni assumenda veritatis voluptatem dolor qui.",
     voted_by: [],
@@ -80,7 +80,7 @@ module.exports = [
     created_at: 1606206360000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Sunday league football",
     body: "Iure cum non veritatis dolore corrupti deserunt perferendis molestiae. Voluptatem ullam qui aut voluptatem. Magnam quo ut rem nobis quibusdam. Assumenda ex laboriosam ut ea explicabo.",
     voted_by: [],
@@ -88,7 +88,7 @@ module.exports = [
     created_at: 1605118560000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Designing Better JavaScript APIs",
     body: "Maiores sed dolor. Consequatur quasi itaque culpa. Tempora ut autem est ad est voluptatem officiis. Ut sequi quaerat qui nam sunt.",
     voted_by: [],
@@ -96,7 +96,7 @@ module.exports = [
     created_at: 1592546400000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "History of FC Barcelona",
     body: "Dolorem ex dolorem blanditiis id. Error dolorem aut est. Facere nostrum et dolor repellendus neque amet deleniti. Aut debitis ut nam dolores.",
     voted_by: [],
@@ -104,7 +104,7 @@ module.exports = [
     created_at: 1599704280000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Making sense of Redux",
     body: "Iure quas est omnis porro. Est in est distinctio sequi consectetur rerum deserunt. Et et reiciendis. Consequatur distinctio sint porro neque molestiae.",
     voted_by: [],
@@ -112,7 +112,7 @@ module.exports = [
     created_at: 1597414140000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "What does Jose Mourinho's handwriting say about his personality?",
     body: "Voluptas enim dolores minima repellendus corporis mollitia omnis. Consectetur vitae quaerat possimus repellendus. Cumque maxime nisi itaque aliquid vel non non.",
     voted_by: [],
@@ -120,7 +120,7 @@ module.exports = [
     created_at: 1578057720000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title:
       "Twice-Baked Butternut Squash Is the Thanksgiving Side Dish of Your Dreams",
     body: "Saepe iure voluptas aut cum occaecati illo. Unde neque et qui facilis cupiditate animi distinctio.",
@@ -129,7 +129,7 @@ module.exports = [
     created_at: 1585954860000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Which current Premier League manager was the best player?",
     body: "Aut rerum culpa consequuntur quos ut pariatur beatae et. Est reprehenderit commodi quia molestiae laboriosam tenetur maxime voluptate et. Sapiente alias illum eaque libero.",
     voted_by: [],
@@ -137,7 +137,7 @@ module.exports = [
     created_at: 1594371600000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Please stop worrying about Angular 3",
     body: "Dicta aut quo unde cupiditate dolorum. Voluptas mollitia exercitationem vel porro dolor. Ea autem est pariatur.",
     voted_by: [],
@@ -145,7 +145,7 @@ module.exports = [
     created_at: 1597515060000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "High Altitude Cooking",
     body: "Id adipisci saepe dolorum et veritatis qui et voluptatibus. Error consequuntur architecto consequatur assumenda rerum similique quo. Quas omnis quam labore exercitationem pariatur veniam assumenda. Tempore maiores rerum. Eum voluptates non repudiandae magnam illo voluptatum. Qui praesentium asperiores rerum vel.",
     voted_by: [],
@@ -153,7 +153,7 @@ module.exports = [
     created_at: 1592582580000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "What does Jose Mourinho's handwriting say about his personality?",
     body: "Libero explicabo aperiam esse quae. Dolores in ipsum vitae incidunt. Magnam ullam nihil voluptas enim veritatis et nobis architecto.",
     voted_by: [],
@@ -161,7 +161,7 @@ module.exports = [
     created_at: 1586236740000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title:
       "JavaScript’s Apply, Call, and Bind Methods are Essential for JavaScript Professionals",
     body: "Exercitationem voluptas inventore corrupti in tenetur cumque. Ut officiis aliquam et quis. Ipsum nostrum sequi voluptatem ex.",
@@ -170,7 +170,7 @@ module.exports = [
     created_at: 1580904900000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title: "Thanksgiving Drinks for Everyone",
     body: "Voluptatibus tempora ab quam pariatur placeat ullam voluptatem aut. Sequi voluptatem vitae quibusdam et qui est quia. Explicabo delectus ullam quis. Officiis eum ipsam non voluptate quam dolores consequatur. Odio aliquam ut eum tempore enim nesciunt.",
     voted_by: [],
@@ -178,7 +178,7 @@ module.exports = [
     created_at: 1591729320000,
   },
   {
-    article_id: '',
+    article_id: 1,
     article_title:
       "An Introduction to JavaScript Object Notation (JSON) in JavaScript and .NET",
     body: "Necessitatibus ea eum error ratione sint cumque occaecati non. Dolor rem accusantium sed debitis. Dolor tempora molestias cupiditate veritatis sit sit ipsam. Aut neque et dolore laboriosam.",
@@ -187,6 +187,7 @@ module.exports = [
     created_at: 1581138720000,
   },
   {
+    article_id: 1,    
     article_title: "What to Cook This Week",
     body: "Quisquam perferendis est doloribus quidem a a. Quam quia ratione rerum facilis rerum est quo aut. Doloribus odio non aut tenetur et qui. Maiores vitae qui illo nisi illum. Accusamus consequatur ducimus vero non nobis alias ratione et aut.",
     voted_by: [],
@@ -194,6 +195,7 @@ module.exports = [
     created_at: 1578482040000,
   },
   {
+    article_id: 1,    
     article_title: "History of Football",
     body: "Ea et molestiae error. Esse harum facilis vitae numquam. Minus id eaque. Dolores nulla ipsam animi sapiente perspiciatis qui possimus.",
     voted_by: [],
@@ -201,6 +203,7 @@ module.exports = [
     created_at: 1597907940000,
   },
   {
+    article_id: 1,
     article_title: "History of FC Barcelona",
     body: "Aut iste eum et modi unde. Sunt et adipisci et ut dolorem facilis voluptas. Deleniti sed nemo facilis. Ex ut et. Et pariatur sed necessitatibus et. Accusamus accusantium ipsam ea sunt facilis et.",
     voted_by: [],
@@ -208,6 +211,7 @@ module.exports = [
     created_at: 1597371660000,
   },
   {
+    article_id: 1,
     article_title: "What to Cook This Week",
     body: "Dolorem aspernatur labore reiciendis. Similique consequuntur voluptatem illum voluptate illo voluptas et nihil rem. Deserunt et totam tenetur quod. Maxime atque dolorem velit ut sit assumenda. Suscipit tenetur nemo ut ea eos et molestiae quisquam. Architecto asperiores esse.",
     voted_by: [],
@@ -215,6 +219,7 @@ module.exports = [
     created_at: 1589850840000,
   },
   {
+    article_id: 1,
     article_title: "22 Amazing open source React projects",
     body: "Dolorem excepturi quaerat. Earum dolor sapiente aut.",
     voted_by: [],
@@ -222,6 +227,7 @@ module.exports = [
     created_at: 1583327100000,
   },
   {
+    article_id: 1,
     article_title: "The vegan carnivore?",
     body: "Perferendis quia et nihil. Quasi ut voluptates sapiente et accusantium vel qui reprehenderit ratione. Autem alias voluptatem accusamus nesciunt beatae vero. Itaque repellat omnis et velit cum corporis aut id voluptas. Nostrum unde fuga ea. Perferendis quas maiores.",
     voted_by: [],

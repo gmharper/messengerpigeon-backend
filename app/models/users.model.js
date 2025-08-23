@@ -3,10 +3,10 @@ const db = require("../../db/connection");
 // GET ALL USERS
 const queryAllUsers = (sort="followers_count", order="DESC", page=0, limit=20, only="") => {
   const Sorts = [
-    "username", "name", "email", "description",
+    "username", "name", "description",
     "profile_colour",
     "created_at",
-    "articles_count", "comments_count", "subscribed_topics_count",
+    "articles_count", "comments_count", "subscribed_topics_count", "subscribed_games_count",
     "followers_count", "following_count",
     "voted_articles_count", "voted_comments_count"
   ];
@@ -37,6 +37,9 @@ const queryAllUsers = (sort="followers_count", order="DESC", page=0, limit=20, o
     case "subscribed_topics_count":
       queryString += ` ORDER BY cardinality(subscribed_topics) ${order}`
       break;
+    case "subscribed_games_count":
+      queryString += ` ORDER BY cardinality(subscribed_games) ${order}`
+      break;  
     case "followers_count":
       queryString += ` ORDER BY cardinality(followers) ${order}`
       break;
@@ -65,10 +68,9 @@ const queryAllUsers = (sort="followers_count", order="DESC", page=0, limit=20, o
 
 const queryUsersData = (dataType) => {
   const dataTypes = [
-    "username", "name", "email",
-    "description",
+    "username", "name", "verified", "description", "theme",
     "profile_colour", "avatar_img_url", "banner_img_url",
-    "articles", "comments", "subscribed_topics",
+    "articles", "comments", "subscribed_topics", "subscribed_games",
     "followers", "following",
     "voted_articles", "voted_comments",
     "created_at",
@@ -97,9 +99,9 @@ const queryUserByUsername = (username) => {
 // GET SPECIFIC USER INFO
 const queryUserData = (username, dataType) => {
   const dataTypes = [
-    "username", "name", "email", "description",
+    "username", "name", "verified", "description", "theme",
     "profile_colour", "avatar_img_url", "banner_img_url", "banner_blend", "banner_position",
-    "articles", "comments", "subscribed_topics",
+    "articles", "comments", "subscribed_topics", "subscribed_games",
     "followers", "following", "voted_articles", "voted_comments",
     "created_at"
   ]
@@ -119,7 +121,7 @@ const queryUserData = (username, dataType) => {
 const queryUserDataCount = (username, countType) => {
   const countTypes = [
     "articles_count", "comments_count",
-    "subscribed_topics_count",
+    "subscribed_topics_count", "subscribed_games_count",
     "followers_count", "following_count",
     "voted_articles_count", "voted_comments_count"
   ]
@@ -138,6 +140,9 @@ const queryUserDataCount = (username, countType) => {
       break;
     case "subscribed_topics_count":
       dataType = "subscribed_topics"
+      break;
+    case "subscribed_games_count":
+      dataType = "subscribed_games"
       break;
     case "followers_count":
       dataType = "followers"
@@ -167,25 +172,25 @@ const queryUserDataCount = (username, countType) => {
 const insertIntoUsers = (user) => {
   //destructure user
   const { 
-    username, name, email, description, 
+    username, name, email, password, verified, description,
     profile_colour, avatar_img_url, banner_img_url, banner_blend, banner_position,
-    comments, articles, subscribed_topics,
+    comments, articles, subscribed_topics, subscribed_games,
     followers, following,
     voted_articles, voted_comments
    } = user 
 
   return db
     .query(
-      "INSERT INTO users (username, name, email, description, " +
+      "INSERT INTO users (username, name, email, password, verified, description, " +
       "profile_colour, avatar_img_url, banner_img_url, banner_blend, banner_position, " + 
-      "comments, articles, subscribed_topics, " +
+      "comments, articles, subscribed_topics, subscribed_games, " +
       "followers, following, voted_articles, voted_comments) " +
-      "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING *;",
+      "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING *;",
       [
-        username, name, email, description, 
+        username, name, email, password, verified, description, 
         profile_colour, avatar_img_url, 
         banner_img_url, banner_blend, banner_position,
-        comments, articles, subscribed_topics,
+        comments, articles, subscribed_topics, subscribed_games,
         followers, following,
         voted_articles, voted_comments
       ]
@@ -200,26 +205,26 @@ const insertIntoUsers = (user) => {
 const updateUser = (username, user) => {
   // destructure user
   const { 
-    name, email, description, 
+    name, email, password, verified, description, theme, 
     profile_colour, avatar_img_url, banner_img_url, banner_blend, banner_position,
-    comments, articles, subscribed_topics,
+    comments, articles, subscribed_topics, subscribed_games,
     followers, following,
     voted_articles, voted_comments
    } = user 
 
   return db
     .query(
-      "UPDATE users SET name=$2, email=$3, description=$4, " +
-      "profile_colour=$5, avatar_img_url=$6, banner_img_url=$7, banner_blend=$8, banner_position=$9, " +
-      "comments=$10, articles=$11, subscribed_topics=$12, " +
-      "followers=$13, following=$14, voted_articles=$15, voted_comments=$16 " +
+      "UPDATE users SET name=$2, email=$3, password=$4, verified=$5, description=$6, " +
+      "profile_colour=$7, avatar_img_url=$8, banner_img_url=$9, banner_blend=$10, banner_position=$11, " +
+      "comments=$12, articles=$13, subscribed_topics=$14, subscribed_games=$15 " +
+      "followers=$16, following=$17, voted_articles=$18, voted_comments=$19, theme=$20 " +
       "WHERE username = $1 RETURNING *;", 
       [
-        username, name, email, description,
+        username, name, email, password, verified, description,
         profile_colour, avatar_img_url, banner_img_url, banner_blend, banner_position,
-        comments, articles, subscribed_topics,
+        comments, articles, subscribed_topics, subscribed_games,
         followers, following,
-        voted_articles, voted_comments
+        voted_articles, voted_comments, theme
       ]
     )
     .then((result) => {
@@ -230,7 +235,7 @@ const updateUser = (username, user) => {
 //////////////////////
 const updateUserData = (username, dataType, data) => {
   const dataTypes = [
-    "name", "email", "description",
+    "name", "email", "password", "verified", "description", "theme",
     "profile_colour", "avatar_img_url", "banner_img_url", "banner_blend", "banner_position",
     "articles", "comments", "subscribed_topics",
     "followers", "following",
