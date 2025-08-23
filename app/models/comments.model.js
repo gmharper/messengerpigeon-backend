@@ -34,11 +34,11 @@ const queryAllComments = (author="", article_id="", sort="", order='DESC', page=
 
   queryString += ` OFFSET ${page*limit} LIMIT ${limit}`
 
-  if (username && article_id) {
+  if (author && article_id) {
     queryString += " WHERE author=$1 AND article_id=$2;"
     queryArray = [author, article_id]
   }
-  else if (username) {
+  else if (author) {
     queryString += " WHERE author=$1;"
     queryArray = [author]
   }
