@@ -20,7 +20,11 @@ const getComments = (req, res, next) => {
 
   return queryAllComments(author, article_id, sort, order, p, limit, only)
     .then((comments) => {
-      return res.status(200).send({ comments: comments, msg: "Successfully retrieved comments" });
+      if (!comments) {
+        return res.status(404).send({ err_msg: "404: Not Found" })
+      } else {
+        return res.status(200).send({ comments: comments, msg: "Successfully retrieved comments" });
+      }
     })
     .catch((err) => { next(err) })
 };

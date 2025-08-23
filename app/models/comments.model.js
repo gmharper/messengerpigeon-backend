@@ -29,11 +29,6 @@ const queryAllComments = (author="", article_id="", sort="", order='DESC', page=
   let queryString = "SELECT * FROM comments"
   let queryArray = []
 
-  if (sort==="votes_count") queryString += ` ORDER BY cardinality(voted_by) ${order}`
-  else if (sort) queryString += ` ORDER BY ${sort} ${order}`
-
-  queryString += ` OFFSET ${page*limit} LIMIT ${limit}`
-
   if (author && article_id) {
     queryString += " WHERE author=$1 AND article_id=$2;"
     queryArray = [author, article_id]
@@ -46,6 +41,11 @@ const queryAllComments = (author="", article_id="", sort="", order='DESC', page=
     queryString += " WHERE article_id=$1;"
     queryArray = [article_id]
   }
+  
+  if (sort==="votes_count") queryString += ` ORDER BY cardinality(voted_by) ${order}`
+  else if (sort) queryString += ` ORDER BY ${sort} ${order}`
+
+  queryString += ` OFFSET ${page*limit} LIMIT ${limit}`
 
   return db
     .query(queryString, queryArray)

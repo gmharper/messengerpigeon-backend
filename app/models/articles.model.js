@@ -46,7 +46,6 @@ const queryAllArticles = (topic="", author="", sort="created_at", order="DESC", 
 
   queryString += ` OFFSET ${page*limit} LIMIT ${limit};`
 
-
   return db.query(queryString, queryArray)
     .then((result) => {
       return result.rows;
